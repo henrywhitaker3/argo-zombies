@@ -1,0 +1,7 @@
+/crog.yaml
+
+build/bin
+dist/
+
+# Go workspace file
+go.work
