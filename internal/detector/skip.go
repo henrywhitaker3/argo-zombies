@@ -1,9 +1,12 @@
 package detector
 
-import "k8s.io/apimachinery/pkg/runtime/schema"
+import (
+	"github.com/henrywhitaker3/argo-zombies/internal/config"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+)
 
 func getSkipList() []schema.GroupVersionResource {
-	return []schema.GroupVersionResource{
+	list := []schema.GroupVersionResource{
 		{
 			Version:  "v1",
 			Resource: "namespaces",
@@ -84,4 +87,14 @@ func getSkipList() []schema.GroupVersionResource {
 			Resource: "appprojects",
 		},
 	}
+
+	for _, gvr := range config.Cfg.Exclusions.GroupVersionResources {
+		list = append(list, schema.GroupVersionResource{
+			Version:  gvr.Version,
+			Group:    gvr.Group,
+			Resource: gvr.Resource,
+		})
+	}
+
+	return list
 }

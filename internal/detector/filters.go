@@ -1,8 +1,6 @@
 package detector
 
 import (
-	"strings"
-
 	"github.com/henrywhitaker3/argo-zombies/internal/config"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
@@ -20,16 +18,6 @@ func BuildFilters() []Filter {
 		KubernetesBootstrappingFilter(),
 		ExcludedNamespacesFilter(),
 		ExcludedSelectorsFilter(),
-		// TODO: add if in config for the longhorn ones
-		LonghornBackupFilter(),
-		LonghornBackupVolumeFilter(),
-		LonghornSettingFilter(),
-		LonghornVolumeFilter(),
-		LonghornNodeFilter(),
-		LonghornBackupTargetFilter(),
-		LonghornEngineImageFilter(),
-		LonghornSystemBackupFilter(),
-		CertManagerSecretFilter(),
 	}
 }
 
@@ -73,92 +61,9 @@ func HelmSecretFilter() Filter {
 	}
 }
 
-func CertManagerSecretFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Secret" && item.GetAPIVersion() == "v1" {
-			if val, present := item.GetLabels()["controller.cert-manager.io/fao"]; present && val == "true" {
-				return true
-			}
-		}
-		return false
-	}
-}
-
 func KubernetesBootstrappingFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
 		if _, present := item.GetLabels()["kubernetes.io/bootstrapping"]; present {
-			return true
-		}
-		return false
-	}
-}
-
-func LonghornBackupFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Backup" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
-			return true
-		}
-		return false
-	}
-}
-
-func LonghornSystemBackupFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "SystemBackup" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
-			return true
-		}
-		return false
-	}
-}
-
-func LonghornSettingFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Setting" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
-			return true
-		}
-		return false
-	}
-}
-
-func LonghornVolumeFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Volume" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
-			return true
-		}
-		return false
-	}
-}
-
-func LonghornBackupVolumeFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "BackupVolume" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
-			return true
-		}
-		return false
-	}
-}
-
-func LonghornNodeFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Node" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
-			return true
-		}
-		return false
-	}
-}
-
-func LonghornBackupTargetFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "BackupTarget" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
-			return true
-		}
-		return false
-	}
-}
-
-func LonghornEngineImageFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "EngineImage" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
 			return true
 		}
 		return false
