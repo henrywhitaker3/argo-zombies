@@ -8,12 +8,10 @@ type Exclusions struct {
 }
 
 type ExcludedResource struct {
-	Annotations map[string]string `yaml:"annotations"`
-	Labels      map[string]string `yaml:"labels"`
-	Namespace   string            `yaml:"namespace"`
-	Name        string            `yaml:"name"`
-	Kind        string            `yaml:"kind"`
-	Version     string            `yaml:"version"`
+	Version   string `yaml:"version"`
+	Kind      string `yaml:"kind"`
+	Name      string `yaml:"name"`
+	Namespace string `yaml:"namespace"`
 }
 
 type ExcludedGroupVersionResource struct {

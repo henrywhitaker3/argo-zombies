@@ -18,6 +18,7 @@ func BuildFilters() []Filter {
 		KubernetesBootstrappingFilter(),
 		ExcludedNamespacesFilter(),
 		ExcludedSelectorsFilter(),
+		ExcludedResourcessFilter(),
 	}
 }
 
@@ -110,4 +111,37 @@ func ExcludedSelectorsFilter() Filter {
 		}
 		return false
 	}
+}
+
+func ExcludedResourcessFilter() Filter {
+	return func(item unstructured.Unstructured) bool {
+		for _, r := range config.Cfg.Exclusions.Resources {
+			if !resourceMatchesNamespace(r.Namespace, item) {
+				continue
+			}
+			if !resourceMatchesAPIVersionKind(r.Version, r.Kind, item) {
+				continue
+			}
+			if resourceMatchesName(r.Name, item) {
+				return true
+			}
+		}
+		return false
+	}
+}
+
+func resourceMatchesNamespace(ns string, item unstructured.Unstructured) bool {
+	if item.GetNamespace() == "" {
+		return true
+	}
+
+	return ns == item.GetNamespace()
+}
+
+func resourceMatchesAPIVersionKind(version, kind string, item unstructured.Unstructured) bool {
+	return item.GetAPIVersion() == version && item.GetKind() == kind
+}
+
+func resourceMatchesName(name string, item unstructured.Unstructured) bool {
+	return item.GetName() == name
 }

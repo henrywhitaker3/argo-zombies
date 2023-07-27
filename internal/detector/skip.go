@@ -72,6 +72,16 @@ func getSkipList() []schema.GroupVersionResource {
 			Resource: "flowschemas",
 		},
 		{
+			Version:  "v1beta2",
+			Group:    "flowcontrol.apiserver.k8s.io",
+			Resource: "prioritylevelconfigurations",
+		},
+		{
+			Version:  "v1beta3",
+			Group:    "flowcontrol.apiserver.k8s.io",
+			Resource: "prioritylevelconfigurations",
+		},
+		{
 			Version:  "v1alpha1",
 			Group:    "argoproj.io",
 			Resource: "applications",
