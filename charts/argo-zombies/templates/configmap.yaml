@@ -12,8 +12,8 @@ data:
       namespaces:
         {{- .Values.config.exclusions.namespaces | toYaml | nindent 8 }}
       resources:
-        {{- .Values.config.exclusions.namespaces | toYaml | nindent 8 }}
+        {{- .Values.config.exclusions.resources | toYaml | nindent 8 }}
       selectors:
-        {{- .Values.config.exclusions.namespaces | toYaml | nindent 8 }}
+        {{- .Values.config.exclusions.selectors | toYaml | nindent 8 }}
       gvrs:
-        {{- .Values.config.exclusions.namespaces | toYaml | nindent 8 }}
+        {{- .Values.config.exclusions.gvrs | toYaml | nindent 8 }}
