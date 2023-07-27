@@ -59,11 +59,19 @@ func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 
 			wg.Add(1)
 			go func() {
+			rl:
 				for _, resource := range group.APIResources {
 					gvr := schema.GroupVersionResource{
 						Group:    gv.Group,
 						Version:  gv.Version,
 						Resource: resource.Name,
+					}
+
+					for _, skip := range getSkipList() {
+						if gvr == skip {
+							fmt.Printf("skipping %s/%s/%s", gvr.Group, gvr.Version, gvr.Resource)
+							continue rl
+						}
 					}
 
 					if !slices.Contains(resource.Verbs, "list") {
@@ -87,7 +95,7 @@ func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 								continue il
 							}
 						}
-						fmt.Printf("zombie item %s/%s %s/%s/%s\n", gv.Group, gv.Version, item.GetAPIVersion(), item.GetKind(), item.GetName())
+						// fmt.Printf("zombie item %s/%s %s/%s/%s\n", gv.Group, gv.Version, item.GetAPIVersion(), item.GetKind(), item.GetName())
 						collection.Push(&item)
 					}
 				}

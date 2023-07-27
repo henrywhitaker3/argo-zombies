@@ -15,11 +15,10 @@ func BuildFilters() []Filter {
 		ArgoLabelFilter(),
 		ArgoApplicationFilter(),
 		ArgoApplicationSetFilter(),
+		ArgoAppProjectFilter(),
 		ServiceAccountSecretFilter(),
 		HelmSecretFilter(),
 		HasOwnerFilter(),
-		NamespaceFilter(),
-		EventFilter(),
 		KubernetesBootstrappingFilter(),
 		// TODO: add if in config for the longhorn ones
 		LonghornBackupFilter(),
@@ -30,8 +29,6 @@ func BuildFilters() []Filter {
 		LonghornBackupTargetFilter(),
 		LonghornEngineImageFilter(),
 		LonghornSystemBackupFilter(),
-		MetricsFilter(),
-		NodeFilter(),
 		CertManagerSecretFilter(),
 	}
 }
@@ -114,18 +111,9 @@ func ArgoApplicationSetFilter() Filter {
 	}
 }
 
-func EventFilter() Filter {
+func ArgoAppProjectFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Event" && (item.GetAPIVersion() == "v1" || strings.Contains(item.GetAPIVersion(), "events.k8s.io")) {
-			return true
-		}
-		return false
-	}
-}
-
-func NamespaceFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Namespace" && item.GetAPIVersion() == "v1" {
+		if item.GetKind() == "AppProject" && strings.Contains(item.GetAPIVersion(), "argoproj.io") {
 			return true
 		}
 		return false
@@ -201,20 +189,5 @@ func LonghornEngineImageFilter() Filter {
 			return true
 		}
 		return false
-	}
-}
-
-func NodeFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Node" && strings.Contains(item.GetAPIVersion(), "v1") {
-			return true
-		}
-		return false
-	}
-}
-
-func MetricsFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		return strings.Contains(item.GetAPIVersion(), "metrics.k8s.io")
 	}
 }
