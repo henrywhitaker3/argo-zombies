@@ -41,28 +41,7 @@ func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 	collection := NewCollection()
 	wg := sync.WaitGroup{}
 
-	filters := []Filter{
-		ArgoLabelFilter(),
-		ArgoApplicationFilter(),
-		ArgoApplicationSetFilter(),
-		ServiceAccountSecretFilter(),
-		HelmSecretFilter(),
-		HasOwnerFilter(),
-		NamespaceFilter(),
-		EventFilter(),
-		KubernetesBootstrappingFilter(),
-		LonghornBackupFilter(),
-		LonghornBackupVolumeFilter(),
-		LonghornSettingFilter(),
-		LonghornVolumeFilter(),
-		LonghornNodeFilter(),
-		LonghornBackupTargetFilter(),
-		LonghornEngineImageFilter(),
-		LonghornSystemBackupFilter(),
-		MetricsFilter(),
-		NodeFilter(),
-		CertManagerSecretFilter(),
-	}
+	filters := BuildFilters()
 
 	_, list, err := d.client.ServerGroupsAndResources()
 	if err != nil {

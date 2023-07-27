@@ -9,6 +9,33 @@ import (
 // Returns true if the item should be filtered out
 type Filter func(item unstructured.Unstructured) bool
 
+// Get the filters to pass items through
+func BuildFilters() []Filter {
+	return []Filter{
+		ArgoLabelFilter(),
+		ArgoApplicationFilter(),
+		ArgoApplicationSetFilter(),
+		ServiceAccountSecretFilter(),
+		HelmSecretFilter(),
+		HasOwnerFilter(),
+		NamespaceFilter(),
+		EventFilter(),
+		KubernetesBootstrappingFilter(),
+		// TODO: add if in config for the longhorn ones
+		LonghornBackupFilter(),
+		LonghornBackupVolumeFilter(),
+		LonghornSettingFilter(),
+		LonghornVolumeFilter(),
+		LonghornNodeFilter(),
+		LonghornBackupTargetFilter(),
+		LonghornEngineImageFilter(),
+		LonghornSystemBackupFilter(),
+		MetricsFilter(),
+		NodeFilter(),
+		CertManagerSecretFilter(),
+	}
+}
+
 func ArgoLabelFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
 		if _, present := item.GetLabels()["argocd.argoproj.io/instance"]; present {
