@@ -4,10 +4,9 @@ Copyright © 2023 Henry Whitaker <henrywhitaker3@outlook.com>
 package cmd
 
 import (
-	"context"
-
 	"github.com/henrywhitaker3/argo-zombies/internal/detector"
 	"github.com/henrywhitaker3/argo-zombies/internal/k8s"
+	"github.com/henrywhitaker3/argo-zombies/internal/views/detect"
 	"github.com/spf13/cobra"
 )
 
@@ -27,7 +26,15 @@ var detectCmd = &cobra.Command{
 
 		d := detector.NewDetector(client, dynClient)
 
-		return d.Detect(context.Background())
+		c, err := d.Detect(cmd.Context())
+		if err != nil {
+			return err
+		}
+
+		tbl := detect.NewTable(c)
+
+		tbl.Print()
+		return nil
 	},
 }
 
