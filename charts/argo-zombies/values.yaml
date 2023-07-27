@@ -37,7 +37,7 @@ tolerations: []
 
 affinity: {}
 
-schedule: "* * * * *"
+schedule: "0 * * * *"
 
 config:
   exclusions:
