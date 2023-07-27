@@ -11,6 +11,7 @@ type Filter func(item unstructured.Unstructured) bool
 // Get the filters to pass items through
 func BuildFilters() []Filter {
 	return []Filter{
+		ArgoZombiesAnnotationFilter(),
 		ArgoLabelFilter(),
 		ServiceAccountSecretFilter(),
 		HelmSecretFilter(),
@@ -44,6 +45,17 @@ func ServiceAccountSecretFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
 		if item.GetKind() == "Secret" && item.GetAPIVersion() == "v1" {
 			if _, present := item.GetAnnotations()["kubernetes.io/service-account.name"]; present {
+				return true
+			}
+		}
+		return false
+	}
+}
+
+func ArgoZombiesAnnotationFilter() Filter {
+	return func(item unstructured.Unstructured) bool {
+		if item.GetKind() == "Secret" && item.GetAPIVersion() == "v1" {
+			if val, present := item.GetAnnotations()["henrywhitaker3.github.com/argo-zombies"]; present && val == "ignore" {
 				return true
 			}
 		}
