@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+data:
+  .argo-zombies.yaml: |
+    exclusions:
+      namespaces:
+        {{- .Values.config.exclusions.namespaces | toYaml | nindent 8 }}
+      resources:
+        {{- .Values.config.exclusions.namespaces | toYaml | nindent 8 }}
+      selectors:
+        {{- .Values.config.exclusions.namespaces | toYaml | nindent 8 }}
+      gvrs:
+        {{- .Values.config.exclusions.namespaces | toYaml | nindent 8 }}
