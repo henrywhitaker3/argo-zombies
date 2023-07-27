@@ -3,6 +3,7 @@ package detector
 import (
 	"strings"
 
+	"github.com/henrywhitaker3/argo-zombies/internal/config"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
@@ -13,13 +14,11 @@ type Filter func(item unstructured.Unstructured) bool
 func BuildFilters() []Filter {
 	return []Filter{
 		ArgoLabelFilter(),
-		ArgoApplicationFilter(),
-		ArgoApplicationSetFilter(),
-		ArgoAppProjectFilter(),
 		ServiceAccountSecretFilter(),
 		HelmSecretFilter(),
 		HasOwnerFilter(),
 		KubernetesBootstrappingFilter(),
+		ExcludedNamespacesFilter(),
 		// TODO: add if in config for the longhorn ones
 		LonghornBackupFilter(),
 		LonghornBackupVolumeFilter(),
@@ -93,33 +92,6 @@ func KubernetesBootstrappingFilter() Filter {
 	}
 }
 
-func ArgoApplicationFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Application" && strings.Contains(item.GetAPIVersion(), "argoproj.io") {
-			return true
-		}
-		return false
-	}
-}
-
-func ArgoApplicationSetFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "ApplicationSet" && strings.Contains(item.GetAPIVersion(), "argoproj.io") {
-			return true
-		}
-		return false
-	}
-}
-
-func ArgoAppProjectFilter() Filter {
-	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "AppProject" && strings.Contains(item.GetAPIVersion(), "argoproj.io") {
-			return true
-		}
-		return false
-	}
-}
-
 func LonghornBackupFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
 		if item.GetKind() == "Backup" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
@@ -187,6 +159,17 @@ func LonghornEngineImageFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
 		if item.GetKind() == "EngineImage" && strings.Contains(item.GetAPIVersion(), "longhorn.io") {
 			return true
+		}
+		return false
+	}
+}
+
+func ExcludedNamespacesFilter() Filter {
+	return func(item unstructured.Unstructured) bool {
+		for _, ns := range config.Cfg.Exclusions.Namespaces {
+			if item.GetNamespace() == ns {
+				return true
+			}
 		}
 		return false
 	}

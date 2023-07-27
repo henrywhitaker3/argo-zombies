@@ -4,22 +4,28 @@ Copyright © 2023 Henry Whitaker <henrywhitaker3@outlook.com>
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/henrywhitaker3/argo-zombies/cmd"
+	"github.com/henrywhitaker3/argo-zombies/internal/config"
 )
 
 func main() {
+	path := getConfigPath()
+
+	if err := config.LoadConfig(path); err != nil {
+		panic(err)
+	}
+
 	cmd.Execute()
 }
 
-func getKubeconfigPath() string {
+func getConfigPath() string {
 	for i, arg := range os.Args {
-		if arg == "--kubeconfig" {
+		if arg == "--config" {
 			return os.Args[i+1]
 		}
 	}
 
-	return fmt.Sprintf("%s/.kube/config", os.Getenv("HOME"))
+	return ".argo-zombies.yaml"
 }

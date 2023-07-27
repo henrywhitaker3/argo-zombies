@@ -5,3 +5,5 @@ dist/
 
 # Go workspace file
 go.work
+
+.argo-zombies.yaml
