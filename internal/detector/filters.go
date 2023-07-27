@@ -116,7 +116,7 @@ func ArgoApplicationSetFilter() Filter {
 
 func EventFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Event" && item.GetAPIVersion() == "v1" {
+		if item.GetKind() == "Event" && (item.GetAPIVersion() == "v1" || strings.Contains(item.GetAPIVersion(), "events.k8s.io")) {
 			return true
 		}
 		return false

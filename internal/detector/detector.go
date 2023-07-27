@@ -30,8 +30,8 @@ func (d *Detector) Detect(ctx context.Context) error {
 		return err
 	}
 
-	for _, item := range col.Items {
-		fmt.Printf("%s/%s/%s\n", item.GetAPIVersion(), item.GetKind(), item.GetName())
+	for name := range col.Items {
+		fmt.Println(name)
 	}
 
 	return nil
