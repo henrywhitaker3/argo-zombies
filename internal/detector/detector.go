@@ -69,7 +69,7 @@ func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 
 					for _, skip := range getSkipList() {
 						if gvr == skip {
-							fmt.Printf("skipping %s/%s/%s", gvr.Group, gvr.Version, gvr.Resource)
+							// fmt.Printf("skipping %s/%s/%s", gvr.Group, gvr.Version, gvr.Resource)
 							continue rl
 						}
 					}

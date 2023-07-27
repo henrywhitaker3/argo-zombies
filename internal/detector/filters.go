@@ -19,6 +19,7 @@ func BuildFilters() []Filter {
 		HasOwnerFilter(),
 		KubernetesBootstrappingFilter(),
 		ExcludedNamespacesFilter(),
+		ExcludedSelectorsFilter(),
 		// TODO: add if in config for the longhorn ones
 		LonghornBackupFilter(),
 		LonghornBackupVolumeFilter(),
@@ -168,6 +169,37 @@ func ExcludedNamespacesFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
 		for _, ns := range config.Cfg.Exclusions.Namespaces {
 			if item.GetNamespace() == ns {
+				return true
+			}
+		}
+		return false
+	}
+}
+
+func ExcludedSelectorsFilter() Filter {
+	matches := func(selectors map[string]string, metadata map[string]string) bool {
+		hit := 0
+		for key, val := range selectors {
+			if v, present := metadata[key]; present && val == v {
+				hit++
+			}
+		}
+		return len(selectors) == hit && hit != 0
+	}
+
+	return func(item unstructured.Unstructured) bool {
+		for _, selector := range config.Cfg.Exclusions.Selectors {
+			passed := false
+
+			if len(item.GetAnnotations()) > 0 && len(selector.Annotations) > 0 {
+				passed = matches(selector.Annotations, item.GetAnnotations())
+			}
+			if len(item.GetLabels()) > 0 && len(selector.Labels) > 0 {
+				passed = matches(selector.Labels, item.GetLabels())
+			}
+
+			if passed {
+				// fmt.Printf("Excluding argo label %s/%s/%s\n", item.GetAPIVersion(), item.GetKind(), item.GetName())
 				return true
 			}
 		}
