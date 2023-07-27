@@ -4,6 +4,8 @@ metadata:
   name: {{ include "chart.fullname" . }}
   labels:
     {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    henrywhitaker3.github.com/argo-zombies: "ignore"
 spec:
   schedule: {{ .Values.schedule | quote }}
   concurrencyPolicy: {{ .Values.concurrencyPolicy | default "Forbid" }}
@@ -12,6 +14,9 @@ spec:
       ttlSecondsAfterFinished: {{ default 60 .Values.ttlSecondsAfterFinished }}
       backoffLimit: {{  default 3 .Values.backoffLimit }}
       template:
+        metadata:
+          annotations:
+            henrywhitaker3.github.com/argo-zombies: "ignore"
         spec:
           restartPolicy: {{ default "Never" .Values.restartPolicy }}
           {{- with .Values.imagePullSecrets }}

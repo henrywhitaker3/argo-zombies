@@ -4,6 +4,8 @@ metadata:
   name: {{ include "chart.fullname" . }}
   labels:
     {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    henrywhitaker3.github.com/argo-zombies: "ignore"
 rules:
   - apiGroups:
       - '*'
