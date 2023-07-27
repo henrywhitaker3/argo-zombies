@@ -1,6 +1,8 @@
 package detector
 
 import (
+	"regexp"
+
 	"github.com/henrywhitaker3/argo-zombies/internal/config"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
@@ -155,5 +157,14 @@ func resourceMatchesAPIVersionKind(version, kind string, item unstructured.Unstr
 }
 
 func resourceMatchesName(name string, item unstructured.Unstructured) bool {
-	return item.GetName() == name
+	if item.GetName() == name {
+		return true
+	}
+
+	match, err := regexp.MatchString(`^`+name+`$`, item.GetName())
+	if err != nil {
+		return false
+	}
+
+	return match
 }

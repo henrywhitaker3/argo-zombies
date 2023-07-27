@@ -5,6 +5,7 @@ type Exclusions struct {
 	Namespaces            []string                       `yaml:"namespaces"`
 	Selectors             []ExcludedMetadata             `yaml:"selectors"`
 	GroupVersionResources []ExcludedGroupVersionResource `yaml:"gvrs"`
+	Bundles               []string                       `yaml:"bundles"`
 }
 
 type ExcludedResource struct {

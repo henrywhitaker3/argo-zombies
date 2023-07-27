@@ -45,3 +45,4 @@ config:
     gvrs: []
     resources: []
     selectors: []
+    bundles: []
