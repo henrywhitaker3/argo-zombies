@@ -167,6 +167,103 @@ func longhornBundle() bundleFunc {
 			},
 			Namespaces: []string{},
 			Selectors:  []ExcludedMetadata{},
+			Resources: []ExcludedResource{
+				{
+					Name:      "csi-attacher",
+					Namespace: "longhorn-system",
+					Kind:      "Service",
+					Version:   "v1",
+				},
+				{
+					Name:      "csi-provisioner",
+					Namespace: "longhorn-system",
+					Kind:      "Service",
+					Version:   "v1",
+				},
+				{
+					Name:      "csi-resizer",
+					Namespace: "longhorn-system",
+					Kind:      "Service",
+					Version:   "v1",
+				},
+				{
+					Name:      "csi-snapshotter",
+					Namespace: "longhorn-system",
+					Kind:      "Service",
+					Version:   "v1",
+				},
+				{
+					Name:      "csi-attacher",
+					Namespace: "longhorn-system",
+					Kind:      "Deployment",
+					Version:   "apps/v1",
+				},
+				{
+					Name:      "csi-provisioner",
+					Namespace: "longhorn-system",
+					Kind:      "Deployment",
+					Version:   "apps/v1",
+				},
+				{
+					Name:      "csi-resizer",
+					Namespace: "longhorn-system",
+					Kind:      "Deployment",
+					Version:   "apps/v1",
+				},
+				{
+					Name:      "csi-snapshotter",
+					Namespace: "longhorn-system",
+					Kind:      "Deployment",
+					Version:   "apps/v1",
+				},
+				{
+					Name:      "csi-attacher",
+					Namespace: "longhorn-system",
+					Kind:      "PodDisruptionBudget",
+					Version:   "policy/v1",
+				},
+				{
+					Name:      "csi-provisioner",
+					Namespace: "longhorn-system",
+					Kind:      "PodDisruptionBudget",
+					Version:   "policy/v1",
+				},
+				{
+					Name:      "instance-manager-.*",
+					Namespace: "longhorn-system",
+					Kind:      "PodDisruptionBudget",
+					Version:   "policy/v1",
+				},
+				{
+					Name:      "longhorn-csi-plugin",
+					Namespace: "longhorn-system",
+					Kind:      "DaemonSet",
+					Version:   "apps/v1",
+				},
+				{
+					Name:      "longhorn-webhook-ca",
+					Namespace: "longhorn-system",
+					Kind:      "Secret",
+					Version:   "v1",
+				},
+				{
+					Name:      "longhorn-webhook-tls",
+					Namespace: "longhorn-system",
+					Kind:      "Secret",
+					Version:   "v1",
+				},
+				{
+					Name:      "recovery-backend-share-manager-.*",
+					Namespace: "longhorn-system",
+					Kind:      "ConfigMap",
+					Version:   "v1",
+				},
+				{
+					Name:    "driver.longhorn.io",
+					Kind:    "CSIDriver",
+					Version: "storage.k8s.io/v1",
+				},
+			},
 		}
 
 		return longhorn

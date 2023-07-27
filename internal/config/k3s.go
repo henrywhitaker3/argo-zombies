@@ -102,7 +102,7 @@ func k3sBundle() bundleFunc {
 					Version:   "v1",
 				},
 				{
-					Name:      "Namespace-controller",
+					Name:      "namespace-controller",
 					Namespace: "kube-system",
 					Kind:      "ServiceAccount",
 					Version:   "v1",
