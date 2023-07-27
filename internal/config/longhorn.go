@@ -263,6 +263,11 @@ func longhornBundle() bundleFunc {
 					Kind:    "CSIDriver",
 					Version: "storage.k8s.io/v1",
 				},
+				{
+					Name:    "longhorn",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
 			},
 		}
 

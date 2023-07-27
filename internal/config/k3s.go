@@ -198,9 +198,25 @@ func k3sBundle() bundleFunc {
 					Version:   "v1",
 				},
 			},
-			GroupVersionResources: []ExcludedGroupVersionResource{},
-			Namespaces:            []string{},
-			Selectors:             []ExcludedMetadata{},
+			GroupVersionResources: []ExcludedGroupVersionResource{
+				{
+					Group:    "k3s.cattle.io",
+					Version:  "v1",
+					Resource: "addons",
+				},
+				{
+					Group:    "helm.cattle.io",
+					Version:  "v1",
+					Resource: "helmchartconfigs",
+				},
+				{
+					Group:    "helm.cattle.io",
+					Version:  "v1",
+					Resource: "helmcharts",
+				},
+			},
+			Namespaces: []string{},
+			Selectors:  []ExcludedMetadata{},
 		}
 
 		return e
