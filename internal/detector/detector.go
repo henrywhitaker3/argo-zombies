@@ -2,7 +2,6 @@ package detector
 
 import (
 	"context"
-	"fmt"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -27,10 +26,6 @@ func (d *Detector) Detect(ctx context.Context) (*Collection, error) {
 	col, err := d.getResources(ctx)
 	if err != nil {
 		return nil, err
-	}
-
-	for name, item := range col.Items {
-		fmt.Printf("%s %s\n", name, item.GetNamespace())
 	}
 
 	return col, nil

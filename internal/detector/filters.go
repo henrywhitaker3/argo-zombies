@@ -131,7 +131,7 @@ func ExcludedResourcessFilter() Filter {
 }
 
 func resourceMatchesNamespace(ns string, item unstructured.Unstructured) bool {
-	if item.GetNamespace() == "" {
+	if item.GetNamespace() == "" || ns == "" {
 		return true
 	}
 
