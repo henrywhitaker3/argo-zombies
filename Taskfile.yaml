@@ -9,4 +9,4 @@ tasks:
     cmds:
       - task: run
         vars:
-          CLI_ARGS: "detect"
+          CLI_ARGS: "detect {{ .CLI_ARGS }}"
