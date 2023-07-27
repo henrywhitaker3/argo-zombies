@@ -2,7 +2,6 @@ package detector
 
 import (
 	"context"
-	"fmt"
 	"sync"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -24,17 +23,13 @@ func NewDetector(client *kubernetes.Clientset, dynClient *dynamic.DynamicClient)
 	}
 }
 
-func (d *Detector) Detect(ctx context.Context) error {
+func (d *Detector) Detect(ctx context.Context) (*Collection, error) {
 	col, err := d.getResources(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	for name := range col.Items {
-		fmt.Println(name)
-	}
-
-	return nil
+	return col, nil
 }
 
 func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
