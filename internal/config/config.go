@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 
+	"github.com/fatih/structs"
 	"gopkg.in/yaml.v3"
 )
 
@@ -16,7 +17,8 @@ type Config struct {
 }
 
 func LoadConfig(path string) error {
-	c := &Config{}
+	Cfg = &Config{}
+	Cfg.setDefaults()
 
 	file, err := os.ReadFile(path)
 	if err != nil {
@@ -27,11 +29,20 @@ func LoadConfig(path string) error {
 		return err
 	}
 
-	if err := yaml.Unmarshal(file, c); err != nil {
+	if err := yaml.Unmarshal(file, Cfg); err != nil {
 		return err
 	}
 
-	Cfg = c
-
 	return nil
+}
+
+func (c *Config) setDefaults() {
+	if structs.IsZero(c.Exclusions) {
+		c.Exclusions = Exclusions{
+			Resources:             []ExcludedResource{},
+			Namespaces:            []string{},
+			Selectors:             []ExcludedMetadata{},
+			GroupVersionResources: []ExcludedGroupVersionResource{},
+		}
+	}
 }

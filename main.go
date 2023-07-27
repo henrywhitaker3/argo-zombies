@@ -17,6 +17,8 @@ func main() {
 		panic(err)
 	}
 
+	// fmt.Println(config.Cfg.Exclusions)
+
 	cmd.Execute()
 }
 
