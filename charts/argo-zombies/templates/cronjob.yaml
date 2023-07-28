@@ -49,7 +49,7 @@ spec:
               env:
                 - name: GITHUB_TOKEN
                   valueFrom:
-                    secretRef:
+                    secretKeyRef:
                       name: {{ .Values.config.dashboards.github.tokenSecretRef.name | default "argo-zombies-dashboard-tokens" }}
                       key: {{ .Values.config.dashboards.github.tokenSecretRef.key | default "GITHUB_TOKEN" }}
                 - name: GITLAB_TOKEN
