@@ -46,6 +46,9 @@ exclusions:
     # - k3s
     # - longhorn
     # - aks
+    # - ingress-nginx
+    # - cert-manager
+    # - datadog
 ```
 
 You can update you helm values to pass these config values to the CronJob.
