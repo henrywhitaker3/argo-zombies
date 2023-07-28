@@ -73,5 +73,10 @@ func (g *Gitlab) createIssue(proj *gitlab.Project, body string) error {
 }
 
 func (g *Gitlab) updateIssue(issue *gitlab.Issue, body string) error {
-	return nil
+	_, _, err := g.client.Issues.UpdateIssue(issue.ProjectID, issue.IID, &gitlab.UpdateIssueOptions{
+		Title:       &title,
+		Description: &body,
+		Labels:      (*gitlab.Labels)(&labels),
+	})
+	return err
 }
