@@ -14,12 +14,6 @@ func K3sBundle() bundleFunc {
 					Version:   "v1",
 				},
 				{
-					Name:      "namespace-controller",
-					Namespace: "kube-system",
-					Kind:      "ServiceAccount",
-					Version:   "v1",
-				},
-				{
 					Name:      ".*node-password.k3s",
 					Namespace: "kube-system",
 					Kind:      "Secret",

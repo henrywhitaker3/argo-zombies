@@ -266,10 +266,66 @@ func AksBundle() bundleFunc {
 					Kind:    "ClusterRoleBinding",
 					Version: "rbac.authorization.k8s.io/v1",
 				},
+				{
+					Name:    "aks-secretproviderclasses-rolebinding",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "aks-secretprovidersyncing-rolebinding",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "aks-secretprovidertokenrequest-rolebinding",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "aks-service-rolebinding",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "auto-approve-csr-for-group",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "auto-approve-renewals-for-nodes",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "cloud-node-manager",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "container-health-read-logs-global",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "create-csrs-for-bootstrapping",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "metrics-server:system:auth-delegator",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
 			},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},
-			Selectors:             []exclusions.ExcludedMetadata{},
+			Selectors: []exclusions.ExcludedMetadata{
+				{
+					Labels: map[string]string{
+						"kubernetes.azure.com/managedby": "aks",
+					},
+				},
+			},
 		}
 
 		return e

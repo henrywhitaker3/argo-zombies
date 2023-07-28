@@ -97,6 +97,12 @@ func K8sBundle() bundleFunc {
 					Version:   "v1",
 				},
 				{
+					Name:      "namespace-controller",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
 					Name:      "node-controller",
 					Namespace: "kube-system",
 					Kind:      "ServiceAccount",
