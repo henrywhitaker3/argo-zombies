@@ -19,6 +19,7 @@ type Config struct {
 	Exclusions exclusions.Exclusions `yaml:"exclusions"`
 	Dashboards struct {
 		Github dashboard.GithubDashboard `yaml:"github"`
+		Gitlab dashboard.GitlabDashboard `yaml:"gitlab"`
 	} `yaml:"dashboards"`
 }
 
@@ -58,8 +59,10 @@ func (c *Config) setDefaults() {
 	if structs.IsZero(c.Dashboards) {
 		c.Dashboards = struct {
 			Github dashboard.GithubDashboard "yaml:\"github\""
+			Gitlab dashboard.GitlabDashboard "yaml:\"gitlab\""
 		}{
 			Github: dashboard.GithubDashboard{Enabled: false},
+			Gitlab: dashboard.GitlabDashboard{Enabled: false},
 		}
 	}
 }
@@ -67,6 +70,9 @@ func (c *Config) setDefaults() {
 func (c *Config) loadEnvVars() {
 	if os.Getenv("GITHUB_TOKEN") != "" {
 		c.Dashboards.Github.Token = os.Getenv("GITHUB_TOKEN")
+	}
+	if os.Getenv("GITLAB_TOKEN") != "" {
+		c.Dashboards.Github.Token = os.Getenv("GITLAB_TOKEN")
 	}
 }
 
