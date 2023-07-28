@@ -268,6 +268,16 @@ func longhornBundle() bundleFunc {
 					Kind:    "StorageClass",
 					Version: "storage.k8s.io/v1",
 				},
+				{
+					Name:    "longhorn-webhook-mutator",
+					Kind:    "MutatingWebhookConfiguration",
+					Version: "admissionregistration.k8s.io/v1",
+				},
+				{
+					Name:    "longhorn-webhook-validator",
+					Kind:    "ValidatingWebhookConfiguration",
+					Version: "admissionregistration.k8s.io/v1",
+				},
 			},
 		}
 
