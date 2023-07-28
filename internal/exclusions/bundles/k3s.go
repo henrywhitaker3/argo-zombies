@@ -26,19 +26,7 @@ func K3sBundle() bundleFunc {
 					Version:   "v1",
 				},
 				{
-					Name:      "coredns",
-					Namespace: "kube-system",
-					Kind:      "Deployment",
-					Version:   "apps/v1",
-				},
-				{
 					Name:      "cluster-dns",
-					Namespace: "kube-system",
-					Kind:      "ConfigMap",
-					Version:   "v1",
-				},
-				{
-					Name:      "coredns",
 					Namespace: "kube-system",
 					Kind:      "ConfigMap",
 					Version:   "v1",

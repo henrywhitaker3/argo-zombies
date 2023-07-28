@@ -76,6 +76,11 @@ func AksBundle() bundleFunc {
 					Kind:    "CSIDriver",
 					Version: "storage.k8s.io/v1",
 				},
+				{
+					Name:    "azure-ip-masq-agent-config-reconciled",
+					Kind:    "ConfigMap",
+					Version: "v1",
+				},
 			},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},
