@@ -52,6 +52,11 @@ spec:
                     secretKeyRef:
                       name: {{ .Values.config.dashboards.github.tokenSecretRef.name | default "argo-zombies-dashboard-tokens" }}
                       key: {{ .Values.config.dashboards.github.tokenSecretRef.key | default "GITHUB_TOKEN" }}
+                - name: GITLAB_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.config.dashboards.gitlab.tokenSecretRef.name | default "argo-zombies-dashboard-tokens" }}
+                      key: {{ .Values.config.dashboards.gitlab.tokenSecretRef.key | default "GITLAB_TOKEN" }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -34,6 +34,10 @@ dashboards: {}
 #     enabled: true
 #     repo: henrywhitaker3/argo-zombies
 #     token: "bongo"
+#   gitlab:
+#     enabled: true
+#     repo: henrywhitaker3/argo-zombies
+#     token: "bongo"
 
 exclusions:
   resources: []

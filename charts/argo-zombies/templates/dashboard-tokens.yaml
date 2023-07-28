@@ -1,4 +1,4 @@
-{{- if (eq .Values.config.dashboards.github.tokenSecretRef.name "") }}
+{{- if or (eq .Values.config.dashboards.github.tokenSecretRef.name "") (eq .Values.config.dashboards.gitlab.tokenSecretRef.name "") }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -9,4 +9,5 @@ metadata:
     argo-zombies/ignore: "true"
 stringData:
   GITHUB_TOKEN: {{ .Values.config.dashboards.github.token | quote }}
+  GITLAB_TOKEN: {{ .Values.config.dashboards.gitlab.token | quote }}
 {{- end }}

@@ -12,6 +12,9 @@ data:
       github:
         enabled: {{ .Values.config.dashboards.github.enabled }}
         repo: {{ .Values.config.dashboards.github.repo | quote }}
+      gitlab:
+        enabled: {{ .Values.config.dashboards.gitlab.enabled }}
+        repo: {{ .Values.config.dashboards.gitlab.repo | quote }}
 
     exclusions:
       namespaces:

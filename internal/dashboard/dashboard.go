@@ -10,3 +10,9 @@ type GithubDashboard struct {
 	Token   string `yaml:"token"`
 	Repo    string `yaml:"repo"`
 }
+
+type GitlabDashboard struct {
+	Enabled bool   `yaml:"enabled"`
+	Token   string `yaml:"token"`
+	Repo    string `yaml:"repo"`
+}
