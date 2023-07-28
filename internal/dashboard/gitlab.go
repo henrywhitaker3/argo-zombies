@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/google/go-github/github"
 	"github.com/xanzy/go-gitlab"
 )
 
@@ -56,16 +55,23 @@ func (g *Gitlab) CreateOrUpdateDashboard(body string) error {
 		return err
 	}
 	for _, issue := range issues {
-		fmt.Println(issue.Title)
+		if issue.Title == title {
+			return g.updateIssue(issue, body)
+		}
 	}
 
-	return nil
+	return g.createIssue(proj, body)
 }
 
-func (g *Gitlab) createIssue(body string) error {
-	return nil
+func (g *Gitlab) createIssue(proj *gitlab.Project, body string) error {
+	_, _, err := g.client.Issues.CreateIssue(proj.ID, &gitlab.CreateIssueOptions{
+		Title:       &title,
+		Labels:      (*gitlab.Labels)(&labels),
+		Description: &body,
+	})
+	return err
 }
 
-func (g *Gitlab) updateIssue(issue *github.Issue, body string) error {
+func (g *Gitlab) updateIssue(issue *gitlab.Issue, body string) error {
 	return nil
 }
