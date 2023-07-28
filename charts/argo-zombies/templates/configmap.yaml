@@ -8,6 +8,11 @@ metadata:
     argo-zombies/ignore: "true"
 data:
   .argo-zombies.yaml: |
+    dashboards:
+      github:
+        enabled: {{ .Values.config.dashboards.github.enabled }}
+        repo: {{ .Values.config.dashboards.github.repo | quote }}
+
     exclusions:
       namespaces:
         {{- .Values.config.exclusions.namespaces | toYaml | nindent 8 }}

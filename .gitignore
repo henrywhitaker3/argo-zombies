@@ -7,3 +7,6 @@ dist/
 go.work
 
 .argo-zombies.yaml
+
+charts/argo-zombies/values.test.yaml
+.vscode/settings.json
