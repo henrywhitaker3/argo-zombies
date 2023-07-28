@@ -4,6 +4,8 @@ Copyright © 2023 Henry Whitaker <henrywhitaker3@outlook.com>
 package cmd
 
 import (
+	"github.com/henrywhitaker3/argo-zombies/internal/config"
+	"github.com/henrywhitaker3/argo-zombies/internal/dashboard"
 	"github.com/henrywhitaker3/argo-zombies/internal/detector"
 	"github.com/henrywhitaker3/argo-zombies/internal/k8s"
 	"github.com/henrywhitaker3/argo-zombies/internal/views/detect"
@@ -32,8 +34,17 @@ var detectCmd = &cobra.Command{
 		}
 
 		tbl := detect.NewTable(c)
-
 		tbl.Print()
+
+		if config.Cfg.Dashboards.Github.Enabled {
+			iB, err := detect.NewMarkdown(c)
+			if err != nil {
+				return err
+			}
+			gh := dashboard.NewGithub(cmd.Context(), config.Cfg.Dashboards.Github.Repo, config.Cfg.Dashboards.Github.Token)
+			return gh.CreateOrUpdateDashboard(iB)
+		}
+
 		return nil
 	},
 }

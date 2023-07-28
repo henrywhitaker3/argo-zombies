@@ -40,6 +40,19 @@ affinity: {}
 schedule: "0 * * * *"
 
 config:
+  dashboards:
+    github:
+      enabled: false
+      repo: ""
+
+      # The GitHub auth token to create the issue dashboard
+      token: ""
+
+      # Reference an existing secret for the GitHub token, overrides the value of .config.dashboards.github.token if set
+      tokenSecretRef:
+        name: ""
+        key: ""
+
   exclusions:
     namespaces: []
     gvrs: []

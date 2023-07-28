@@ -1,0 +1,12 @@
+{{- if (eq .Values.config.dashboards.github.tokenSecretRef.name "") }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argo-zombies-dashboard-tokens
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    argo-zombies/ignore: "true"
+stringData:
+  GITHUB_TOKEN: {{ .Values.config.dashboards.github.token | quote }}
+{{- end }}
