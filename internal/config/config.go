@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/fatih/structs"
+	"github.com/henrywhitaker3/argo-zombies/internal/exclusions"
+	"github.com/henrywhitaker3/argo-zombies/internal/exclusions/bundles"
 	"gopkg.in/yaml.v3"
 )
 
@@ -13,7 +15,7 @@ var (
 )
 
 type Config struct {
-	Exclusions Exclusions `yaml:"exclusions"`
+	Exclusions exclusions.Exclusions `yaml:"exclusions"`
 }
 
 func LoadConfig(path string) error {
@@ -40,11 +42,11 @@ func LoadConfig(path string) error {
 
 func (c *Config) setDefaults() {
 	if structs.IsZero(c.Exclusions) {
-		c.Exclusions = Exclusions{
-			Resources:             []ExcludedResource{},
+		c.Exclusions = exclusions.Exclusions{
+			Resources:             []exclusions.ExcludedResource{},
 			Namespaces:            []string{},
-			Selectors:             []ExcludedMetadata{},
-			GroupVersionResources: []ExcludedGroupVersionResource{},
+			Selectors:             []exclusions.ExcludedMetadata{},
+			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Bundles:               []string{},
 		}
 	}
@@ -53,7 +55,7 @@ func (c *Config) setDefaults() {
 func (c *Config) addBundles() {
 	c.Exclusions.Bundles = append(c.Exclusions.Bundles, "k8s")
 	for _, bundle := range c.Exclusions.Bundles {
-		if f, valid := bundles[bundle]; valid {
+		if f, valid := bundles.Bundles[bundle]; valid {
 			excls := f()
 
 			c.mergeResources(excls.Resources)
@@ -64,7 +66,7 @@ func (c *Config) addBundles() {
 	}
 }
 
-func (c *Config) mergeResources(r []ExcludedResource) {
+func (c *Config) mergeResources(r []exclusions.ExcludedResource) {
 	c.Exclusions.Resources = append(c.Exclusions.Resources, r...)
 }
 
@@ -72,10 +74,10 @@ func (c *Config) mergeNamespaces(ns []string) {
 	c.Exclusions.Namespaces = append(c.Exclusions.Namespaces, ns...)
 }
 
-func (c *Config) mergeSelectors(s []ExcludedMetadata) {
+func (c *Config) mergeSelectors(s []exclusions.ExcludedMetadata) {
 	c.Exclusions.Selectors = append(c.Exclusions.Selectors, s...)
 }
 
-func (c *Config) mergeGroupVersionResources(g []ExcludedGroupVersionResource) {
+func (c *Config) mergeGroupVersionResources(g []exclusions.ExcludedGroupVersionResource) {
 	c.Exclusions.GroupVersionResources = append(c.Exclusions.GroupVersionResources, g...)
 }

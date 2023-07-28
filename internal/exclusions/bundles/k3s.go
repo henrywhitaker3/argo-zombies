@@ -1,10 +1,12 @@
-package config
+package bundles
+
+import "github.com/henrywhitaker3/argo-zombies/internal/exclusions"
 
 // Add exclusions for k3s resources
-func k3sBundle() bundleFunc {
-	return func() Exclusions {
-		e := Exclusions{
-			Resources: []ExcludedResource{
+func K3sBundle() bundleFunc {
+	return func() exclusions.Exclusions {
+		e := exclusions.Exclusions{
+			Resources: []exclusions.ExcludedResource{
 				{
 					Name:      "attachdetach-controller",
 					Namespace: "kube-system",
@@ -298,7 +300,7 @@ func k3sBundle() bundleFunc {
 					Version:   "rbac.authorization.k8s.io/v1",
 				},
 			},
-			GroupVersionResources: []ExcludedGroupVersionResource{
+			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{
 				{
 					Group:    "k3s.cattle.io",
 					Version:  "v1",
@@ -316,7 +318,7 @@ func k3sBundle() bundleFunc {
 				},
 			},
 			Namespaces: []string{},
-			Selectors:  []ExcludedMetadata{},
+			Selectors:  []exclusions.ExcludedMetadata{},
 		}
 
 		return e

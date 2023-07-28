@@ -1,9 +1,11 @@
-package config
+package bundles
 
-func k8sBundle() bundleFunc {
-	return func() Exclusions {
-		e := Exclusions{
-			Resources: []ExcludedResource{
+import "github.com/henrywhitaker3/argo-zombies/internal/exclusions"
+
+func K8sBundle() bundleFunc {
+	return func() exclusions.Exclusions {
+		e := exclusions.Exclusions{
+			Resources: []exclusions.ExcludedResource{
 				{
 					Name:    "kube-root-ca.crt",
 					Kind:    "ConfigMap",
@@ -49,9 +51,9 @@ func k8sBundle() bundleFunc {
 					Version:   "v1",
 				},
 			},
-			GroupVersionResources: []ExcludedGroupVersionResource{},
+			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},
-			Selectors:             []ExcludedMetadata{},
+			Selectors:             []exclusions.ExcludedMetadata{},
 		}
 
 		return e

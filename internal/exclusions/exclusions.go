@@ -1,4 +1,4 @@
-package config
+package exclusions
 
 type Exclusions struct {
 	Resources             []ExcludedResource             `yaml:"resources"`
