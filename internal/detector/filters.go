@@ -57,7 +57,7 @@ func ServiceAccountSecretFilter() Filter {
 func ArgoZombiesAnnotationFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
 		if item.GetKind() == "Secret" && item.GetAPIVersion() == "v1" {
-			if val, present := item.GetAnnotations()["henrywhitaker3.github.com/argo-zombies"]; present && val == "ignore" {
+			if val, present := item.GetAnnotations()["argo-zombies/ignore"]; present && val == "true" {
 				return true
 			}
 		}

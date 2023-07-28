@@ -52,3 +52,13 @@ exclusions:
 ```
 
 You can update you helm values to pass these config values to the CronJob.
+
+### Ignoring Resources
+
+You can also ignore resources by adding the annotation:
+
+```yaml
+argo-zombies/ignore: "true"
+```
+
+to a resource

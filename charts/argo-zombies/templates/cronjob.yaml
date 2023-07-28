@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    henrywhitaker3.github.com/argo-zombies: "ignore"
+    argo-zombies/ignore: "true"
 spec:
   schedule: {{ .Values.schedule | quote }}
   concurrencyPolicy: {{ .Values.concurrencyPolicy | default "Forbid" }}
@@ -16,7 +16,7 @@ spec:
       template:
         metadata:
           annotations:
-            henrywhitaker3.github.com/argo-zombies: "ignore"
+            argo-zombies/ignore: "true"
         spec:
           restartPolicy: {{ default "Never" .Values.restartPolicy }}
           {{- with .Values.imagePullSecrets }}
