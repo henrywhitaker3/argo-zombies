@@ -1,9 +1,11 @@
-package config
+package bundles
 
-func longhornBundle() bundleFunc {
-	return func() Exclusions {
-		longhorn := Exclusions{
-			GroupVersionResources: []ExcludedGroupVersionResource{
+import "github.com/henrywhitaker3/argo-zombies/internal/exclusions"
+
+func LonghornBundle() bundleFunc {
+	return func() exclusions.Exclusions {
+		longhorn := exclusions.Exclusions{
+			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{
 				{
 					Group:    "longhorn.io",
 					Version:  "v1beta1",
@@ -166,8 +168,8 @@ func longhornBundle() bundleFunc {
 				},
 			},
 			Namespaces: []string{},
-			Selectors:  []ExcludedMetadata{},
-			Resources: []ExcludedResource{
+			Selectors:  []exclusions.ExcludedMetadata{},
+			Resources: []exclusions.ExcludedResource{
 				{
 					Name:      "csi-attacher",
 					Namespace: "longhorn-system",

@@ -45,6 +45,7 @@ exclusions:
   bundles: []
     # - k3s
     # - longhorn
+    # - aks
 ```
 
 You can update you helm values to pass these config values to the CronJob.

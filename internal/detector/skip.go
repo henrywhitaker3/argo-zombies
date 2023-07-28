@@ -96,6 +96,11 @@ func getSkipList() []schema.GroupVersionResource {
 			Group:    "argoproj.io",
 			Resource: "appprojects",
 		},
+		{
+			Version:  "v1",
+			Group:    "apiregistration.k8s.io",
+			Resource: "apiservices",
+		},
 	}
 
 	for _, gvr := range config.Cfg.Exclusions.GroupVersionResources {
