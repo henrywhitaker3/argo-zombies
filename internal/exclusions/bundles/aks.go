@@ -21,6 +21,56 @@ func AksBundle() bundleFunc {
 					Kind:    "MutatingWebhookConfiguration",
 					Version: "admissionregistration.k8s.io/v1",
 				},
+				{
+					Name:    "managed-premium",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
+				{
+					Name:    "managed-csi-premium",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
+				{
+					Name:    "managed-csi",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
+				{
+					Name:    "default",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
+				{
+					Name:    "azurefile-premium",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
+				{
+					Name:    "azurefile-csi-premium",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
+				{
+					Name:    "azurefile-csi",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
+				{
+					Name:    "azurefile",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
+				{
+					Name:    "file.csi.azure.com",
+					Kind:    "CSIDriver",
+					Version: "storage.k8s.io/v1",
+				},
+				{
+					Name:    "disk.csi.azure.com",
+					Kind:    "CSIDriver",
+					Version: "storage.k8s.io/v1",
+				},
 			},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},
