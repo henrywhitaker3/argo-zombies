@@ -19,7 +19,7 @@ type Config struct {
 	Exclusions exclusions.Exclusions `yaml:"exclusions"`
 	Dashboards struct {
 		Github dashboard.GithubDashboard `yaml:"github"`
-	} `yaml:"dashboard"`
+	} `yaml:"dashboards"`
 }
 
 func LoadConfig(path string) error {
@@ -58,7 +58,7 @@ func (c *Config) setDefaults() {
 		c.Dashboards = struct {
 			Github dashboard.GithubDashboard "yaml:\"github\""
 		}{
-			Github: dashboard.GithubDashboard{},
+			Github: dashboard.GithubDashboard{Enabled: false},
 		}
 	}
 }

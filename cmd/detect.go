@@ -34,11 +34,18 @@ var detectCmd = &cobra.Command{
 		}
 
 		tbl := detect.NewTable(c)
-
 		tbl.Print()
 
-		gh := dashboard.NewGithub(cmd.Context(), config.Cfg.Dashboards.Github.Repo, config.Cfg.Dashboards.Github.Token)
-		return gh.CreateOrUpdateDashboard()
+		if config.Cfg.Dashboards.Github.Enabled {
+			iB, err := detect.NewMarkdown(c)
+			if err != nil {
+				return err
+			}
+			gh := dashboard.NewGithub(cmd.Context(), config.Cfg.Dashboards.Github.Repo, config.Cfg.Dashboards.Github.Token)
+			return gh.CreateOrUpdateDashboard(iB)
+		}
+
+		return nil
 	},
 }
 

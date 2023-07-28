@@ -5,11 +5,8 @@ var (
 	labels []string = []string{"gitops/argo-zombies"}
 )
 
-type CreateOrUpdate func() error
-
-type Dashboard struct{}
-
 type GithubDashboard struct {
-	Token string `yaml:"token"`
-	Repo  string `yaml:"repo"`
+	Enabled bool   `yaml:"enabled"`
+	Token   string `yaml:"token"`
+	Repo    string `yaml:"repo"`
 }

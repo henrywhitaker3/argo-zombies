@@ -32,7 +32,7 @@ func NewGithub(ctx context.Context, repo string, token string) *Github {
 	}
 }
 
-func (g *Github) CreateOrUpdateDashboard() error {
+func (g *Github) CreateOrUpdateDashboard(body string) error {
 	list, _, err := g.client.Issues.ListByRepo(g.ctx, g.owner, g.repo, &github.IssueListByRepoOptions{
 		Labels: labels,
 	})
@@ -42,24 +42,24 @@ func (g *Github) CreateOrUpdateDashboard() error {
 
 	for _, issue := range list {
 		if *issue.Title == title {
-			return g.updateIssue(issue)
+			return g.updateIssue(issue, body)
 		}
 	}
 
-	return g.createIssue()
+	return g.createIssue(body)
 }
 
-func (g *Github) createIssue() error {
+func (g *Github) createIssue(body string) error {
 	issue := &github.IssueRequest{
 		Title:  &title,
 		Labels: &labels,
+		Body:   &body,
 	}
 	_, _, err := g.client.Issues.Create(g.ctx, g.owner, g.repo, issue)
 	return err
 }
 
-func (g *Github) updateIssue(issue *github.Issue) error {
-	body := "bongo"
+func (g *Github) updateIssue(issue *github.Issue, body string) error {
 	ir := &github.IssueRequest{
 		Title:  issue.Title,
 		Body:   &body,
