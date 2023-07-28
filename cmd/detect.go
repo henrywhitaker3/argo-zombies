@@ -36,13 +36,27 @@ var detectCmd = &cobra.Command{
 		tbl := detect.NewTable(c)
 		tbl.Print()
 
-		if config.Cfg.Dashboards.Github.Enabled {
+		if dashboardEnabled(config.Cfg) {
 			iB, err := detect.NewMarkdown(c)
 			if err != nil {
 				return err
 			}
-			gh := dashboard.NewGithub(cmd.Context(), config.Cfg.Dashboards.Github.Repo, config.Cfg.Dashboards.Github.Token)
-			return gh.CreateOrUpdateDashboard(iB)
+
+			if config.Cfg.Dashboards.Github.Enabled {
+				gh := dashboard.NewGithub(cmd.Context(), config.Cfg.Dashboards.Github.Repo, config.Cfg.Dashboards.Github.Token)
+				if err := gh.CreateOrUpdateDashboard(iB); err != nil {
+					panic(err)
+				}
+			}
+			if config.Cfg.Dashboards.Gitlab.Enabled {
+				gl, err := dashboard.NewGitlab(cmd.Context(), config.Cfg.Dashboards.Gitlab.Repo, config.Cfg.Dashboards.Gitlab.Token)
+				if err != nil {
+					panic(err)
+				}
+				if err := gl.CreateOrUpdateDashboard(iB); err != nil {
+					panic(err)
+				}
+			}
 		}
 
 		return nil
@@ -61,4 +75,8 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// detectCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func dashboardEnabled(cfg *config.Config) bool {
+	return config.Cfg.Dashboards.Github.Enabled || config.Cfg.Dashboards.Gitlab.Enabled
 }

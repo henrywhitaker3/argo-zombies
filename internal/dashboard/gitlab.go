@@ -2,71 +2,70 @@ package dashboard
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/google/go-github/github"
-	"golang.org/x/oauth2"
+	"github.com/xanzy/go-gitlab"
 )
 
 type Gitlab struct {
 	ctx    context.Context
-	client *github.Client
+	client *gitlab.Client
 	owner  string
 	repo   string
 }
 
-func NewGitlab(ctx context.Context, repo string, token string) *Github {
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: token},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-	client := github.NewClient(tc)
+func NewGitlab(ctx context.Context, repo string, token string) (*Gitlab, error) {
+	client, err := gitlab.NewClient(token)
+	if err != nil {
+		return nil, err
+	}
 
 	s := strings.SplitN(repo, "/", 2)
 
-	return &Github{
+	return &Gitlab{
 		ctx:    ctx,
 		client: client,
 		owner:  s[0],
 		repo:   s[1],
-	}
+	}, nil
 }
 
 func (g *Gitlab) CreateOrUpdateDashboard(body string) error {
-	list, _, err := g.client.Issues.ListByRepo(g.ctx, g.owner, g.repo, &github.IssueListByRepoOptions{
-		Labels: labels,
+	var proj *gitlab.Project
+	projs, _, err := g.client.Projects.ListProjects(&gitlab.ListProjectsOptions{
+		Membership: gitlab.Bool(true),
 	})
 	if err != nil {
 		return err
 	}
 
-	for _, issue := range list {
-		if *issue.Title == title {
-			return g.updateIssue(issue, body)
+	for _, project := range projs {
+		if project.Name == g.repo {
+			proj = project
 		}
 	}
 
-	return g.createIssue(body)
+	if proj == nil {
+		return fmt.Errorf("could not access repo %s", g.repo)
+	}
+
+	issues, _, err := g.client.Issues.ListProjectIssues(proj.ID, &gitlab.ListProjectIssuesOptions{})
+	if err != nil {
+		return err
+	}
+	for _, issue := range issues {
+		fmt.Println(issue.Title)
+	}
+
+	return nil
 }
 
 func (g *Gitlab) createIssue(body string) error {
-	issue := &github.IssueRequest{
-		Title:  &title,
-		Labels: &labels,
-		Body:   &body,
-	}
-	_, _, err := g.client.Issues.Create(g.ctx, g.owner, g.repo, issue)
-	return err
+	return nil
 }
 
 func (g *Gitlab) updateIssue(issue *github.Issue, body string) error {
-	ir := &github.IssueRequest{
-		Title:  issue.Title,
-		Body:   &body,
-		State:  issue.State,
-		Labels: &labels,
-	}
-
-	_, _, err := g.client.Issues.Edit(g.ctx, g.owner, g.repo, *issue.Number, ir)
-	return err
+	return nil
 }
