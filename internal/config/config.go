@@ -33,6 +33,8 @@ func LoadConfig(path string) error {
 		return err
 	}
 
+	Cfg.addBundles()
+
 	return nil
 }
 
@@ -43,6 +45,36 @@ func (c *Config) setDefaults() {
 			Namespaces:            []string{},
 			Selectors:             []ExcludedMetadata{},
 			GroupVersionResources: []ExcludedGroupVersionResource{},
+			Bundles:               []string{},
 		}
 	}
+}
+
+func (c *Config) addBundles() {
+	for _, bundle := range c.Exclusions.Bundles {
+		if f, valid := bundles[bundle]; valid {
+			excls := f()
+
+			c.mergeResources(excls.Resources)
+			c.mergeNamespaces(excls.Namespaces)
+			c.mergeSelectors(excls.Selectors)
+			c.mergeGroupVersionResources(excls.GroupVersionResources)
+		}
+	}
+}
+
+func (c *Config) mergeResources(r []ExcludedResource) {
+	c.Exclusions.Resources = append(c.Exclusions.Resources, r...)
+}
+
+func (c *Config) mergeNamespaces(ns []string) {
+	c.Exclusions.Namespaces = append(c.Exclusions.Namespaces, ns...)
+}
+
+func (c *Config) mergeSelectors(s []ExcludedMetadata) {
+	c.Exclusions.Selectors = append(c.Exclusions.Selectors, s...)
+}
+
+func (c *Config) mergeGroupVersionResources(g []ExcludedGroupVersionResource) {
+	c.Exclusions.GroupVersionResources = append(c.Exclusions.GroupVersionResources, g...)
 }

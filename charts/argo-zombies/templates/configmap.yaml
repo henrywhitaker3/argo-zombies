@@ -17,3 +17,5 @@ data:
         {{- .Values.config.exclusions.selectors | toYaml | nindent 8 }}
       gvrs:
         {{- .Values.config.exclusions.gvrs | toYaml | nindent 8 }}
+      bundles:
+        {{- .Values.config.exclusions.bundles | toYaml | nindent 8 }}
