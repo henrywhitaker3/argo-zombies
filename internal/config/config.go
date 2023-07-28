@@ -40,6 +40,7 @@ func LoadConfig(path string) error {
 	}
 
 	Cfg.addBundles()
+	Cfg.loadEnvVars()
 
 	return nil
 }
@@ -60,6 +61,12 @@ func (c *Config) setDefaults() {
 		}{
 			Github: dashboard.GithubDashboard{Enabled: false},
 		}
+	}
+}
+
+func (c *Config) loadEnvVars() {
+	if os.Getenv("GITHUB_TOKEN") != "" {
+		c.Dashboards.Github.Token = os.Getenv("GITHUB_TOKEN")
 	}
 }
 
