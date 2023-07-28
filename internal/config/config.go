@@ -72,7 +72,7 @@ func (c *Config) loadEnvVars() {
 		c.Dashboards.Github.Token = os.Getenv("GITHUB_TOKEN")
 	}
 	if os.Getenv("GITLAB_TOKEN") != "" {
-		c.Dashboards.Github.Token = os.Getenv("GITLAB_TOKEN")
+		c.Dashboards.Gitlab.Token = os.Getenv("GITLAB_TOKEN")
 	}
 }
 
