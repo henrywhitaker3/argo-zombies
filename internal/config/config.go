@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/fatih/structs"
@@ -41,8 +40,6 @@ func LoadConfig(path string) error {
 	}
 
 	Cfg.addBundles()
-
-	fmt.Println(Cfg.Dashboards)
 
 	return nil
 }
