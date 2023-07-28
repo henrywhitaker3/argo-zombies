@@ -2,9 +2,11 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"os"
 
 	"github.com/fatih/structs"
+	"github.com/henrywhitaker3/argo-zombies/internal/dashboard"
 	"github.com/henrywhitaker3/argo-zombies/internal/exclusions"
 	"github.com/henrywhitaker3/argo-zombies/internal/exclusions/bundles"
 	"gopkg.in/yaml.v3"
@@ -16,6 +18,9 @@ var (
 
 type Config struct {
 	Exclusions exclusions.Exclusions `yaml:"exclusions"`
+	Dashboards struct {
+		Github dashboard.GithubDashboard `yaml:"github"`
+	} `yaml:"dashboard"`
 }
 
 func LoadConfig(path string) error {
@@ -37,6 +42,8 @@ func LoadConfig(path string) error {
 
 	Cfg.addBundles()
 
+	fmt.Println(Cfg.Dashboards)
+
 	return nil
 }
 
@@ -48,6 +55,13 @@ func (c *Config) setDefaults() {
 			Selectors:             []exclusions.ExcludedMetadata{},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Bundles:               []string{},
+		}
+	}
+	if structs.IsZero(c.Dashboards) {
+		c.Dashboards = struct {
+			Github dashboard.GithubDashboard "yaml:\"github\""
+		}{
+			Github: dashboard.GithubDashboard{},
 		}
 	}
 }
