@@ -62,6 +62,11 @@ func AksBundle() bundleFunc {
 					Version: "storage.k8s.io/v1",
 				},
 				{
+					Name:    "managed",
+					Kind:    "StorageClass",
+					Version: "storage.k8s.io/v1",
+				},
+				{
 					Name:    "file.csi.azure.com",
 					Kind:    "CSIDriver",
 					Version: "storage.k8s.io/v1",
