@@ -51,6 +51,7 @@ func (c *Config) setDefaults() {
 }
 
 func (c *Config) addBundles() {
+	c.Exclusions.Bundles = append(c.Exclusions.Bundles, "k8s")
 	for _, bundle := range c.Exclusions.Bundles {
 		if f, valid := bundles[bundle]; valid {
 			excls := f()
