@@ -254,6 +254,18 @@ func K8sBundle() bundleFunc {
 					Kind:      "Deployment",
 					Version:   "apps/v1",
 				},
+				{
+					Name:      "coredns",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
+					Name:      "coredns-autoscaler",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
 			},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},
