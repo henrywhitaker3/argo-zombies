@@ -35,6 +35,7 @@ dockers:
   - dockerfile: release.Dockerfile
     image_templates:
       - ghcr.io/henrywhitaker3/argo-zombies:{{ .Tag }}
+      - ghcr.io/henrywhitaker3/argo-zombies:latest
 
 # The lines beneath this are called `modelines`. See `:help modeline`
 # Feel free to remove those if you don't want/use them.
