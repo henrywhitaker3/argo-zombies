@@ -1,4 +1,4 @@
-FROM golang:1.20-alpine as certs
+FROM golang:1.21-alpine as certs
 
 RUN apk --no-cache add ca-certificates
 
