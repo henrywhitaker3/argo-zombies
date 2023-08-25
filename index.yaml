@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   argo-zombies:
   - apiVersion: v2
+    appVersion: 0.1.13
+    created: "2023-08-25T05:16:49.27194483Z"
+    description: A Helm chart for argo-zombies
+    digest: cee61edeaf6450b08b1e9969780b79b1e8c42fee275727eba31cd62e264e7d59
+    name: argo-zombies
+    type: application
+    urls:
+    - https://github.com/henrywhitaker3/argo-zombies/releases/download/argo-zombies-chart-0.1.18/argo-zombies-0.1.18.tgz
+    version: 0.1.18
+  - apiVersion: v2
     appVersion: 0.1.12
     created: "2023-07-28T22:27:46.990298266Z"
     description: A Helm chart for argo-zombies
@@ -171,4 +181,4 @@ entries:
     urls:
     - https://github.com/henrywhitaker3/argo-zombies/releases/download/argo-zombies-chart-0.1.1/argo-zombies-0.1.1.tgz
     version: 0.1.1
-generated: "2023-07-28T22:27:46.990507966Z"
+generated: "2023-08-25T05:16:49.27208673Z"
