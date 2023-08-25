@@ -8,7 +8,7 @@ require (
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/rodaine/table v1.1.0
 	github.com/spf13/cobra v1.7.0
-	github.com/xanzy/go-gitlab v0.89.0
+	github.com/xanzy/go-gitlab v0.90.0
 	golang.org/x/oauth2 v0.11.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.28.1
