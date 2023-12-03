@@ -115,6 +115,11 @@ func K3sBundle() bundleFunc {
 					Resource: "addons",
 				},
 				{
+					Group:    "k3s.cattle.io",
+					Version:  "v1",
+					Resource: "ETCDSnapshotFile",
+				},
+				{
 					Group:    "helm.cattle.io",
 					Version:  "v1",
 					Resource: "helmchartconfigs",
