@@ -117,7 +117,7 @@ func K3sBundle() bundleFunc {
 				{
 					Group:    "k3s.cattle.io",
 					Version:  "v1",
-					Resource: "ETCDSnapshotFile",
+					Resource: "etcdsnapshotfiles",
 				},
 				{
 					Group:    "helm.cattle.io",
