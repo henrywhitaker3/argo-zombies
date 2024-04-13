@@ -272,6 +272,12 @@ func K8sBundle() bundleFunc {
 					Kind:      "ServiceAccount",
 					Version:   "v1",
 				},
+				{
+					Name:      "legacy-service-account-token-cleaner",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
 			},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},
