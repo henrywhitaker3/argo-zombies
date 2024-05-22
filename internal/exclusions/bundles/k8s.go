@@ -278,6 +278,12 @@ func K8sBundle() bundleFunc {
 					Kind:      "ServiceAccount",
 					Version:   "v1",
 				},
+				{
+					Name:      "validatingadmissionpolicy-status-controller",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
 			},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},
