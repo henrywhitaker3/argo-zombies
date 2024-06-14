@@ -10,6 +10,10 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
+func init() {
+	rest.SetDefaultWarningHandler(rest.NoWarnings{})
+}
+
 func NewClient(kubeConfigPath string) (*kubernetes.Clientset, error) {
 	config, err := getConfig(kubeConfigPath)
 	if err != nil {
