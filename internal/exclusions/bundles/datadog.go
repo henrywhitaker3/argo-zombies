@@ -2,7 +2,7 @@ package bundles
 
 import "github.com/henrywhitaker3/argo-zombies/internal/exclusions"
 
-func DatadogBundle() bundleFunc {
+func DatadogBundle() BundleFunc {
 	return func() exclusions.Exclusions {
 		e := exclusions.Exclusions{
 			Resources: []exclusions.ExcludedResource{

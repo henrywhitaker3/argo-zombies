@@ -2,7 +2,7 @@ package bundles
 
 import "github.com/henrywhitaker3/argo-zombies/internal/exclusions"
 
-func LonghornBundle() bundleFunc {
+func LonghornBundle() BundleFunc {
 	return func() exclusions.Exclusions {
 		longhorn := exclusions.Exclusions{
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{
