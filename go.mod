@@ -9,7 +9,7 @@ require (
 	github.com/fatih/structs v1.1.0
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/rodaine/table v1.2.0
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
 	github.com/xanzy/go-gitlab v0.90.0
 	golang.org/x/oauth2 v0.21.0
