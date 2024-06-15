@@ -15,6 +15,7 @@ func BuildFilters() []Filter {
 	return []Filter{
 		ArgoZombiesAnnotationFilter(),
 		ArgoLabelFilter(),
+		ArgoRedisSecretFilter(),
 		ServiceAccountSecretFilter(),
 		HelmSecretFilter(),
 		HasOwnerFilter(),
@@ -22,6 +23,7 @@ func BuildFilters() []Filter {
 		ExcludedNamespacesFilter(),
 		ExcludedSelectorsFilter(),
 		ExcludedResourcessFilter(),
+		ExcludeStatefulsetPersistentVolumeClaims(),
 	}
 }
 
@@ -31,6 +33,12 @@ func ArgoLabelFilter() Filter {
 			return true
 		}
 		return false
+	}
+}
+
+func ArgoRedisSecretFilter() Filter {
+	return func(item unstructured.Unstructured) bool {
+		return item.GetName() == "argocd-redis" && item.GetKind() == "Secret"
 	}
 }
 
@@ -56,10 +64,8 @@ func ServiceAccountSecretFilter() Filter {
 
 func ArgoZombiesAnnotationFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
-		if item.GetKind() == "Secret" && item.GetAPIVersion() == "v1" {
-			if val, present := item.GetAnnotations()["argo-zombies/ignore"]; present && val == "true" {
-				return true
-			}
+		if val, present := item.GetAnnotations()["argo-zombies/ignore"]; present && val == "true" {
+			return true
 		}
 		return false
 	}
@@ -96,6 +102,19 @@ func ExcludedNamespacesFilter() Filter {
 	}
 }
 
+func ExcludeStatefulsetPersistentVolumeClaims() Filter {
+	return func(item unstructured.Unstructured) bool {
+		if item.GetKind() != "PersistentVolumeClaim" {
+			return false
+		}
+		match, err := regexp.MatchString("(.*)-[0-9]+", item.GetName())
+		if err != nil {
+			return false
+		}
+		return match
+	}
+}
+
 func ExcludedSelectorsFilter() Filter {
 	matches := func(selectors map[string]string, metadata map[string]string) bool {
 		hit := 0
@@ -119,7 +138,6 @@ func ExcludedSelectorsFilter() Filter {
 			}
 
 			if passed {
-				// fmt.Printf("Excluding argo label %s/%s/%s\n", item.GetAPIVersion(), item.GetKind(), item.GetName())
 				return true
 			}
 		}
