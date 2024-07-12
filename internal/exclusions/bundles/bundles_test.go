@@ -19,16 +19,11 @@ type testCase struct {
 func testCases() []testCase {
 	cases := []testCase{}
 	cases = append(cases, aksTestCases()...)
+	cases = append(cases, certManagerTestCases()...)
+	cases = append(cases, datadogTestCases()...)
+	cases = append(cases, ingressNginxTestCases()...)
+	cases = append(cases, k3sTestCases()...)
 	return cases
-}
-
-func baseItem() unstructured.Unstructured {
-	item := unstructured.Unstructured{}
-	item.SetAPIVersion("v1")
-	item.SetKind("Pod")
-	item.SetName("bongo")
-	item.SetNamespace("default")
-	return item
 }
 
 func TestBundleExclusions(t *testing.T) {
