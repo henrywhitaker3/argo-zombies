@@ -9,31 +9,29 @@ import (
 )
 
 type Github struct {
-	ctx    context.Context
 	client *github.Client
 	owner  string
 	repo   string
 }
 
-func NewGithub(ctx context.Context, repo string, token string) *Github {
+func NewGithub(repo string, token string) *Github {
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
 	)
-	tc := oauth2.NewClient(ctx, ts)
+	tc := oauth2.NewClient(context.Background(), ts)
 	client := github.NewClient(tc)
 
 	s := strings.SplitN(repo, "/", 2)
 
 	return &Github{
-		ctx:    ctx,
 		client: client,
 		owner:  s[0],
 		repo:   s[1],
 	}
 }
 
-func (g *Github) CreateOrUpdateDashboard(body string) error {
-	list, _, err := g.client.Issues.ListByRepo(g.ctx, g.owner, g.repo, &github.IssueListByRepoOptions{
+func (g *Github) CreateOrUpdateDashboard(ctx context.Context, body string) error {
+	list, _, err := g.client.Issues.ListByRepo(ctx, g.owner, g.repo, &github.IssueListByRepoOptions{
 		Labels: labels,
 	})
 	if err != nil {
@@ -42,24 +40,24 @@ func (g *Github) CreateOrUpdateDashboard(body string) error {
 
 	for _, issue := range list {
 		if *issue.Title == title {
-			return g.updateIssue(issue, body)
+			return g.updateIssue(ctx, issue, body)
 		}
 	}
 
-	return g.createIssue(body)
+	return g.createIssue(ctx, body)
 }
 
-func (g *Github) createIssue(body string) error {
+func (g *Github) createIssue(ctx context.Context, body string) error {
 	issue := &github.IssueRequest{
 		Title:  &title,
 		Labels: &labels,
 		Body:   &body,
 	}
-	_, _, err := g.client.Issues.Create(g.ctx, g.owner, g.repo, issue)
+	_, _, err := g.client.Issues.Create(ctx, g.owner, g.repo, issue)
 	return err
 }
 
-func (g *Github) updateIssue(issue *github.Issue, body string) error {
+func (g *Github) updateIssue(ctx context.Context, issue *github.Issue, body string) error {
 	ir := &github.IssueRequest{
 		Title:  issue.Title,
 		Body:   &body,
@@ -67,6 +65,6 @@ func (g *Github) updateIssue(issue *github.Issue, body string) error {
 		Labels: &labels,
 	}
 
-	_, _, err := g.client.Issues.Edit(g.ctx, g.owner, g.repo, *issue.Number, ir)
+	_, _, err := g.client.Issues.Edit(ctx, g.owner, g.repo, *issue.Number, ir)
 	return err
 }

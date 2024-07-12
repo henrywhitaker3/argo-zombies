@@ -8,28 +8,31 @@ import (
 )
 
 func TestItReturnsAnEmptyConfigWhenNoFileProvided(t *testing.T) {
-	if err := LoadConfig("bongo"); err != nil {
+	cfg, err := LoadConfig("bongo")
+	if err != nil {
 		t.Error(err)
 	}
 
-	assert.Equal(t, []string{}, Cfg.Exclusions.Namespaces)
-	assert.Equal(t, []string{}, Cfg.Exclusions.Bundles)
-	assert.Equal(t, []exclusions.ExcludedGroupVersionResource{}, Cfg.Exclusions.GroupVersionResources)
-	assert.Equal(t, []exclusions.ExcludedMetadata{}, Cfg.Exclusions.Selectors)
+	assert.Equal(t, []string{}, cfg.Exclusions.Namespaces)
+	assert.Equal(t, []string{}, cfg.Exclusions.Bundles)
+	assert.Equal(t, []exclusions.ExcludedGroupVersionResource{}, cfg.Exclusions.GroupVersionResources)
+	assert.Equal(t, []exclusions.ExcludedMetadata{}, cfg.Exclusions.Selectors)
 }
 
 func TestItSetsGithubDashboardAsDisabledByDefault(t *testing.T) {
-	if err := LoadConfig("bongo"); err != nil {
+	cfg, err := LoadConfig("bongo")
+	if err != nil {
 		t.Error(err)
 	}
 
-	assert.Equal(t, false, Cfg.Dashboards.Github.Enabled)
+	assert.Equal(t, false, cfg.Dashboards.Github.Enabled)
 }
 
 func TestItSetsGitlabDashboardAsDisabledByDefault(t *testing.T) {
-	if err := LoadConfig("bongo"); err != nil {
+	cfg, err := LoadConfig("bongo")
+	if err != nil {
 		t.Error(err)
 	}
 
-	assert.Equal(t, false, Cfg.Dashboards.Gitlab.Enabled)
+	assert.Equal(t, false, cfg.Dashboards.Gitlab.Enabled)
 }

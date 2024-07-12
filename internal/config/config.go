@@ -8,14 +8,28 @@ import (
 	"github.com/henrywhitaker3/argo-zombies/internal/dashboard"
 	"github.com/henrywhitaker3/argo-zombies/internal/exclusions"
 	"github.com/henrywhitaker3/argo-zombies/internal/exclusions/bundles"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"gopkg.in/yaml.v3"
 )
 
-var (
-	Cfg *Config
-)
+type LogLevel string
+
+func (l LogLevel) Level() zap.AtomicLevel {
+	switch l {
+	case "info":
+		return zap.NewAtomicLevelAt(zapcore.InfoLevel)
+	case "debug":
+		return zap.NewAtomicLevelAt(zapcore.DebugLevel)
+	case "error":
+		fallthrough
+	default:
+		return zap.NewAtomicLevelAt(zapcore.ErrorLevel)
+	}
+}
 
 type Config struct {
+	LogLevel   LogLevel              `yaml:"logLevel"`
 	Exclusions exclusions.Exclusions `yaml:"exclusions"`
 	Dashboards struct {
 		Github dashboard.GithubDashboard `yaml:"github"`
@@ -23,27 +37,27 @@ type Config struct {
 	} `yaml:"dashboards"`
 }
 
-func LoadConfig(path string) error {
-	Cfg = &Config{}
-	Cfg.setDefaults()
+func LoadConfig(path string) (*Config, error) {
+	c := &Config{}
+	c.setDefaults()
 
 	file, err := os.ReadFile(path)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return nil
+			return c, nil
 		}
 
-		return err
+		return nil, err
 	}
 
-	if err := yaml.Unmarshal(file, Cfg); err != nil {
-		return err
+	if err := yaml.Unmarshal(file, c); err != nil {
+		return nil, err
 	}
 
-	Cfg.addBundles()
-	Cfg.loadEnvVars()
+	c.addBundles()
+	c.loadEnvVars()
 
-	return nil
+	return c, nil
 }
 
 func (c *Config) setDefaults() {

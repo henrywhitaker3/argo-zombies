@@ -9,13 +9,12 @@ import (
 )
 
 type Gitlab struct {
-	ctx    context.Context
 	client *gitlab.Client
 	owner  string
 	repo   string
 }
 
-func NewGitlab(ctx context.Context, repo string, token string) (*Gitlab, error) {
+func NewGitlab(repo string, token string) (*Gitlab, error) {
 	client, err := gitlab.NewClient(token)
 	if err != nil {
 		return nil, err
@@ -24,14 +23,13 @@ func NewGitlab(ctx context.Context, repo string, token string) (*Gitlab, error) 
 	s := strings.SplitN(repo, "/", 2)
 
 	return &Gitlab{
-		ctx:    ctx,
 		client: client,
 		owner:  s[0],
 		repo:   s[1],
 	}, nil
 }
 
-func (g *Gitlab) CreateOrUpdateDashboard(body string) error {
+func (g *Gitlab) CreateOrUpdateDashboard(ctx context.Context, body string) error {
 	var proj *gitlab.Project
 	projs, _, err := g.client.Projects.ListProjects(&gitlab.ListProjectsOptions{
 		Membership: gitlab.Bool(true),

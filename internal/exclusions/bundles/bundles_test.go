@@ -29,18 +29,17 @@ func testCases() []testCase {
 func TestBundleExclusions(t *testing.T) {
 	for _, c := range testCases() {
 		t.Run(c.name, func(t *testing.T) {
-			config.Cfg = &config.Config{
+			cfg := &config.Config{
 				Exclusions: c.bundle(),
 			}
-			defer func() { config.Cfg = nil }()
 			filtered := false
-			if detector.ExcludedNamespacesFilter()(c.item) {
+			if detector.ExcludedNamespacesFilter(cfg.Exclusions.Namespaces)(c.item) {
 				filtered = true
 			}
-			if detector.ExcludedResourcessFilter()(c.item) {
+			if detector.ExcludedResourcessFilter(cfg.Exclusions.Resources)(c.item) {
 				filtered = true
 			}
-			if detector.ExcludedSelectorsFilter()(c.item) {
+			if detector.ExcludedSelectorsFilter(cfg.Exclusions.Selectors)(c.item) {
 				filtered = true
 			}
 			if c.shouldReturn != filtered {

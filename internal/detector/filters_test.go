@@ -11,6 +11,40 @@ import (
 )
 
 func TestItFiltersOutItems(t *testing.T) {
+	cfg := &config.Config{
+		Exclusions: exclusions.Exclusions{
+			Namespaces: []string{"bongo"},
+			Selectors: []exclusions.ExcludedMetadata{
+				{
+					Annotations: map[string]string{
+						"exclude-lone": "bingo",
+					},
+				},
+				{
+					Labels: map[string]string{
+						"exclude-lone": "bingo",
+					},
+				},
+				{
+					Annotations: map[string]string{
+						"exclude-combo": "bingo",
+					},
+					Labels: map[string]string{
+						"exclude-combo": "bongo",
+					},
+				},
+			},
+			Resources: []exclusions.ExcludedResource{
+				{
+					Version:   "v1",
+					Kind:      "Pod",
+					Name:      "poddo",
+					Namespace: "bongo",
+				},
+			},
+		},
+	}
+
 	type test struct {
 		name         string
 		item         unstructured.Unstructured
@@ -105,99 +139,64 @@ func TestItFiltersOutItems(t *testing.T) {
 		{
 			name:         "filters out an item in an exlcuded namespace",
 			item:         itemInExcludedNamespace(),
-			filter:       detector.ExcludedNamespacesFilter(),
+			filter:       detector.ExcludedNamespacesFilter(cfg.Exclusions.Namespaces),
 			shouldReturn: true,
 		},
 		{
 			name:         "doesn't filter out an item not in an exlcuded namespace",
 			item:         baseItem(),
-			filter:       detector.ExcludedNamespacesFilter(),
+			filter:       detector.ExcludedNamespacesFilter(cfg.Exclusions.Namespaces),
 			shouldReturn: false,
 		},
 		{
 			name:         "filters out item with lone annotation selector",
 			item:         itemWithExcludedAnnotation(),
-			filter:       detector.ExcludedSelectorsFilter(),
+			filter:       detector.ExcludedSelectorsFilter(cfg.Exclusions.Selectors),
 			shouldReturn: true,
 		},
 		{
 			name:         "doesn't filter out item with lone annotation selector with wrong value",
 			item:         itemWithExcludedAnnotationWrongValue(),
-			filter:       detector.ExcludedSelectorsFilter(),
+			filter:       detector.ExcludedSelectorsFilter(cfg.Exclusions.Selectors),
 			shouldReturn: false,
 		},
 		{
 			name:         "filters out item with excluded label",
 			item:         itemWithExcludedLabel(),
-			filter:       detector.ExcludedSelectorsFilter(),
+			filter:       detector.ExcludedSelectorsFilter(cfg.Exclusions.Selectors),
 			shouldReturn: true,
 		},
 		{
 			name:         "doesn't filter out item with excluded label with wrong value",
 			item:         itemWithExcludedLabelWrongValue(),
-			filter:       detector.ExcludedSelectorsFilter(),
+			filter:       detector.ExcludedSelectorsFilter(cfg.Exclusions.Selectors),
 			shouldReturn: false,
 		},
 		{
 			name:         "filters out an item with excluded label/anno combo",
 			item:         itemWithExcludedAnnoAndLabel(),
-			filter:       detector.ExcludedSelectorsFilter(),
+			filter:       detector.ExcludedSelectorsFilter(cfg.Exclusions.Selectors),
 			shouldReturn: true,
 		},
 		{
 			name:         "doesn't filter out an item with excluded label/anno combo with wrong label value",
 			item:         itemWithExcludedAnnoAndLabelWrongLabelValue(),
-			filter:       detector.ExcludedSelectorsFilter(),
+			filter:       detector.ExcludedSelectorsFilter(cfg.Exclusions.Selectors),
 			shouldReturn: false,
 		},
 		{
 			name:         "filters out excluded resource",
 			item:         excludedResoureItem(),
-			filter:       detector.ExcludedResourcessFilter(),
+			filter:       detector.ExcludedResourcessFilter(cfg.Exclusions.Resources),
 			shouldReturn: true,
 		},
 		{
 			name:         "doesn't filter out non-excluded resource",
 			item:         baseItem(),
-			filter:       detector.ExcludedResourcessFilter(),
+			filter:       detector.ExcludedResourcessFilter(cfg.Exclusions.Resources),
 			shouldReturn: false,
 		},
 	}
-
-	config.Cfg = &config.Config{
-		Exclusions: exclusions.Exclusions{
-			Namespaces: []string{"bongo"},
-			Selectors: []exclusions.ExcludedMetadata{
-				{
-					Annotations: map[string]string{
-						"exclude-lone": "bingo",
-					},
-				},
-				{
-					Labels: map[string]string{
-						"exclude-lone": "bingo",
-					},
-				},
-				{
-					Annotations: map[string]string{
-						"exclude-combo": "bingo",
-					},
-					Labels: map[string]string{
-						"exclude-combo": "bongo",
-					},
-				},
-			},
-			Resources: []exclusions.ExcludedResource{
-				{
-					Version:   "v1",
-					Kind:      "Pod",
-					Name:      "poddo",
-					Namespace: "bongo",
-				},
-			},
-		},
-	}
-	defer func() { config.Cfg = nil }()
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
