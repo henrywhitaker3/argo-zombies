@@ -31,6 +31,7 @@ func main() {
 	app.Version = version
 
 	ctx := logger.Wrap(context.Background(), cfg.LogLevel.Level())
+	defer logger.Logger(ctx).Sync()
 
 	root := cmd.NewRootCommand(app)
 	root.SetContext(ctx)

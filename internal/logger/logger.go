@@ -34,7 +34,6 @@ func newLogger(level zap.AtomicLevel) *zap.SugaredLogger {
 		logConfig.OutputPaths = []string{"stdout"}
 		logConfig.Level = level
 		logger, _ := logConfig.Build()
-		defer logger.Sync()
 		zl = logger.Sugar()
 	}
 	return zl

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/henrywhitaker3/argo-zombies/internal/config"
+	"github.com/henrywhitaker3/argo-zombies/internal/logger"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
@@ -35,6 +36,8 @@ func (d *Detector) Detect(ctx context.Context) (*Collection, error) {
 }
 
 func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
+	logger := logger.Logger(ctx)
+
 	collection := NewCollection()
 
 	filters := BuildFilters(d.cfg)
@@ -50,6 +53,9 @@ func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 			return nil, err
 		}
 
+		gl := logger.With("group", gv.Group, "version", gv.Version)
+		gl.Debugw("processing group")
+
 	rl:
 		for _, resource := range group.APIResources {
 			gvr := schema.GroupVersionResource{
@@ -57,10 +63,11 @@ func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 				Version:  gv.Version,
 				Resource: resource.Name,
 			}
+			gvrl := gl.With("resource", gvr.Resource)
 
 			for _, skip := range getSkipList(d.cfg) {
 				if gvr == skip {
-					// fmt.Printf("skipping %s/%s/%s", gvr.Group, gvr.Version, gvr.Resource)
+					gvrl.Debug("skipping")
 					continue rl
 				}
 			}
@@ -68,12 +75,13 @@ func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 			if !slices.Contains(resource.Verbs, "list") {
 				continue
 			}
-			// fmt.Printf("processing resource %s/%s/%s\n", gv.Group, gv.Version, resource.Name)
+			gvrl.Debugw("processing resource")
 
 			restAPI := d.dynClient.Resource(gvr).Namespace("")
 
 			gvrList, err := restAPI.List(ctx, metav1.ListOptions{})
 			if err != nil {
+				gvrl.Errorw("failed to list resources", "error", err)
 				continue
 			}
 
@@ -81,6 +89,7 @@ func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 			for _, item := range gvrList.Items {
 				for _, filter := range filters {
 					if filter(item) {
+						gvrl.Debugw("item filtered out", "name", item.GetName(), "namespace", item.GetNamespace())
 						continue il
 					}
 				}
