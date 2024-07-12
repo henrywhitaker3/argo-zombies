@@ -3,7 +3,7 @@ package bundles
 import "github.com/henrywhitaker3/argo-zombies/internal/exclusions"
 
 // Add exclusions for k3s resources
-func K3sBundle() bundleFunc {
+func K3sBundle() BundleFunc {
 	return func() exclusions.Exclusions {
 		e := exclusions.Exclusions{
 			Resources: []exclusions.ExcludedResource{
