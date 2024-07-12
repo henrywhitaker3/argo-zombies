@@ -4,6 +4,7 @@ import (
 	"regexp"
 
 	"github.com/henrywhitaker3/argo-zombies/internal/config"
+	"github.com/henrywhitaker3/argo-zombies/internal/exclusions"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
@@ -11,7 +12,7 @@ import (
 type Filter func(item unstructured.Unstructured) bool
 
 // Get the filters to pass items through
-func BuildFilters() []Filter {
+func BuildFilters(cfg *config.Config) []Filter {
 	return []Filter{
 		ArgoZombiesAnnotationFilter(),
 		ArgoLabelFilter(),
@@ -20,9 +21,9 @@ func BuildFilters() []Filter {
 		HelmSecretFilter(),
 		HasOwnerFilter(),
 		KubernetesBootstrappingFilter(),
-		ExcludedNamespacesFilter(),
-		ExcludedSelectorsFilter(),
-		ExcludedResourcessFilter(),
+		ExcludedNamespacesFilter(cfg.Exclusions.Namespaces),
+		ExcludedSelectorsFilter(cfg.Exclusions.Selectors),
+		ExcludedResourcessFilter(cfg.Exclusions.Resources),
 		ExcludeStatefulsetPersistentVolumeClaims(),
 	}
 }
@@ -91,9 +92,9 @@ func KubernetesBootstrappingFilter() Filter {
 	}
 }
 
-func ExcludedNamespacesFilter() Filter {
+func ExcludedNamespacesFilter(namespaces []string) Filter {
 	return func(item unstructured.Unstructured) bool {
-		for _, ns := range config.Cfg.Exclusions.Namespaces {
+		for _, ns := range namespaces {
 			if item.GetNamespace() == ns {
 				return true
 			}
@@ -115,7 +116,7 @@ func ExcludeStatefulsetPersistentVolumeClaims() Filter {
 	}
 }
 
-func ExcludedSelectorsFilter() Filter {
+func ExcludedSelectorsFilter(selectors []exclusions.ExcludedMetadata) Filter {
 	matches := func(selectors map[string]string, metadata map[string]string) bool {
 		hit := 0
 		for key, val := range selectors {
@@ -127,7 +128,7 @@ func ExcludedSelectorsFilter() Filter {
 	}
 
 	return func(item unstructured.Unstructured) bool {
-		for _, selector := range config.Cfg.Exclusions.Selectors {
+		for _, selector := range selectors {
 			passed := false
 
 			if len(item.GetAnnotations()) > 0 && len(selector.Annotations) > 0 {
@@ -145,9 +146,9 @@ func ExcludedSelectorsFilter() Filter {
 	}
 }
 
-func ExcludedResourcessFilter() Filter {
+func ExcludedResourcessFilter(resources []exclusions.ExcludedResource) Filter {
 	return func(item unstructured.Unstructured) bool {
-		for _, r := range config.Cfg.Exclusions.Resources {
+		for _, r := range resources {
 			if !resourceMatchesNamespace(r.Namespace, item) {
 				continue
 			}

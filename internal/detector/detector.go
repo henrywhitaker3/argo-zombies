@@ -3,6 +3,7 @@ package detector
 import (
 	"context"
 
+	"github.com/henrywhitaker3/argo-zombies/internal/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
@@ -13,12 +14,14 @@ import (
 type Detector struct {
 	client    *kubernetes.Clientset
 	dynClient *dynamic.DynamicClient
+	cfg       *config.Config
 }
 
-func NewDetector(client *kubernetes.Clientset, dynClient *dynamic.DynamicClient) *Detector {
+func NewDetector(client *kubernetes.Clientset, dynClient *dynamic.DynamicClient, cfg *config.Config) *Detector {
 	return &Detector{
 		client:    client,
 		dynClient: dynClient,
+		cfg:       cfg,
 	}
 }
 
@@ -34,7 +37,7 @@ func (d *Detector) Detect(ctx context.Context) (*Collection, error) {
 func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 	collection := NewCollection()
 
-	filters := BuildFilters()
+	filters := BuildFilters(d.cfg)
 
 	_, list, err := d.client.ServerGroupsAndResources()
 	if err != nil {
@@ -55,7 +58,7 @@ func (d *Detector) getResources(ctx context.Context) (*Collection, error) {
 				Resource: resource.Name,
 			}
 
-			for _, skip := range getSkipList() {
+			for _, skip := range getSkipList(d.cfg) {
 				if gvr == skip {
 					// fmt.Printf("skipping %s/%s/%s", gvr.Group, gvr.Version, gvr.Resource)
 					continue rl
