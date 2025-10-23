@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/xanzy/go-gitlab"
+	gitlab "gitlab.com/gitlab-org/api/client-go"
 )
 
 type Gitlab struct {
@@ -34,7 +34,7 @@ func NewGitlab(ctx context.Context, repo string, token string) (*Gitlab, error) 
 func (g *Gitlab) CreateOrUpdateDashboard(body string) error {
 	var proj *gitlab.Project
 	projs, _, err := g.client.Projects.ListProjects(&gitlab.ListProjectsOptions{
-		Membership: gitlab.Bool(true),
+		Membership: gitlab.Ptr(true),
 	})
 	if err != nil {
 		return err
@@ -55,7 +55,7 @@ func (g *Gitlab) CreateOrUpdateDashboard(body string) error {
 		return err
 	}
 	for _, issue := range issues {
-		if issue.Title == title {
+		if issue.Title == title && issue.State != "closed" {
 			return g.updateIssue(issue, body)
 		}
 	}
@@ -66,7 +66,7 @@ func (g *Gitlab) CreateOrUpdateDashboard(body string) error {
 func (g *Gitlab) createIssue(proj *gitlab.Project, body string) error {
 	_, _, err := g.client.Issues.CreateIssue(proj.ID, &gitlab.CreateIssueOptions{
 		Title:       &title,
-		Labels:      (*gitlab.Labels)(&labels),
+		Labels:      (*gitlab.LabelOptions)(&labels),
 		Description: &body,
 	})
 	return err
@@ -76,7 +76,7 @@ func (g *Gitlab) updateIssue(issue *gitlab.Issue, body string) error {
 	_, _, err := g.client.Issues.UpdateIssue(issue.ProjectID, issue.IID, &gitlab.UpdateIssueOptions{
 		Title:       &title,
 		Description: &body,
-		Labels:      (*gitlab.Labels)(&labels),
+		Labels:      (*gitlab.LabelOptions)(&labels),
 	})
 	return err
 }
