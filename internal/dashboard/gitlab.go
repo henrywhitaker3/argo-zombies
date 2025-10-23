@@ -55,7 +55,7 @@ func (g *Gitlab) CreateOrUpdateDashboard(body string) error {
 		return err
 	}
 	for _, issue := range issues {
-		if issue.Title == title {
+		if issue.Title == title && issue.State != "closed" {
 			return g.updateIssue(issue, body)
 		}
 	}

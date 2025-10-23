@@ -45,16 +45,16 @@ var detectCmd = &cobra.Command{
 			if config.Cfg.Dashboards.Github.Enabled {
 				gh := dashboard.NewGithub(cmd.Context(), config.Cfg.Dashboards.Github.Repo, config.Cfg.Dashboards.Github.Token)
 				if err := gh.CreateOrUpdateDashboard(iB); err != nil {
-					panic(err)
+					return err
 				}
 			}
 			if config.Cfg.Dashboards.Gitlab.Enabled {
 				gl, err := dashboard.NewGitlab(cmd.Context(), config.Cfg.Dashboards.Gitlab.Repo, config.Cfg.Dashboards.Gitlab.Token)
 				if err != nil {
-					panic(err)
+					return err
 				}
 				if err := gl.CreateOrUpdateDashboard(iB); err != nil {
-					panic(err)
+					return err
 				}
 			}
 		}
