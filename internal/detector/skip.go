@@ -5,7 +5,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
-func getSkipList() []schema.GroupVersionResource {
+func getSkipList(cfg *config.Config) []schema.GroupVersionResource {
 	list := []schema.GroupVersionResource{
 		{
 			Version:  "v1",
@@ -118,7 +118,7 @@ func getSkipList() []schema.GroupVersionResource {
 		},
 	}
 
-	for _, gvr := range config.Cfg.Exclusions.GroupVersionResources {
+	for _, gvr := range cfg.Exclusions.GroupVersionResources {
 		list = append(list, schema.GroupVersionResource{
 			Version:  gvr.Version,
 			Group:    gvr.Group,
