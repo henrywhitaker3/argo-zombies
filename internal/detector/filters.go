@@ -7,14 +7,15 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
-// Returns true if the item should be filtered out
+// Filter returns true if the item should be filtered out
 type Filter func(item unstructured.Unstructured) bool
 
-// Get the filters to pass items through
+// BuildFilters returns the filters to pass items through
 func BuildFilters() []Filter {
 	return []Filter{
 		ArgoZombiesAnnotationFilter(),
 		ArgoLabelFilter(),
+		ArgoAnnotationFilter(),
 		ArgoRedisSecretFilter(),
 		ServiceAccountSecretFilter(),
 		HelmSecretFilter(),
@@ -30,6 +31,15 @@ func BuildFilters() []Filter {
 func ArgoLabelFilter() Filter {
 	return func(item unstructured.Unstructured) bool {
 		if _, present := item.GetLabels()["argocd.argoproj.io/instance"]; present {
+			return true
+		}
+		return false
+	}
+}
+
+func ArgoAnnotationFilter() Filter {
+	return func(item unstructured.Unstructured) bool {
+		if _, present := item.GetAnnotations()["argocd.argoproj.io/tracking-id"]; present {
 			return true
 		}
 		return false
