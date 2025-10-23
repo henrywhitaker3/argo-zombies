@@ -284,10 +284,28 @@ func K8sBundle() BundleFunc {
 					Kind:      "ServiceAccount",
 					Version:   "v1",
 				},
+				{
+					Name:      "service-cidrs-controller",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
+					Name:      "kubernetes",
+					Namespace: "",
+					Kind:      "ServiceCIDR",
+					Version:   "networking.k8s.io/v1",
+				},
 			},
-			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
-			Namespaces:            []string{},
-			Selectors:             []exclusions.ExcludedMetadata{},
+			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{
+				{
+					Group:    "networking.k8s.io",
+					Version:  "v1",
+					Resource: "ipaddresses",
+				},
+			},
+			Namespaces: []string{},
+			Selectors:  []exclusions.ExcludedMetadata{},
 		}
 
 		return e
