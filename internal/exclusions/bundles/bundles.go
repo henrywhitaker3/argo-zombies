@@ -1,3 +1,4 @@
+// Package bundles
 package bundles
 
 import "github.com/henrywhitaker3/argo-zombies/internal/exclusions"
@@ -12,4 +13,5 @@ var Bundles map[string]BundleFunc = map[string]BundleFunc{
 	"ingress-nginx": IngressNginxBundle(),
 	"cert-manager":  CertManagerBundle(),
 	"datadog":       DatadogBundle(),
+	"netbird":       NetbirdBundle(),
 }

@@ -285,6 +285,12 @@ func K8sBundle() BundleFunc {
 					Version:   "v1",
 				},
 				{
+					Name:      "service-cidrs-controller",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
 					Name:      "kubernetes",
 					Namespace: "",
 					Kind:      "ServiceCIDR",
