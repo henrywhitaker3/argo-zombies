@@ -2,7 +2,9 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/fatih/structs"
 	"github.com/henrywhitaker3/argo-zombies/internal/dashboard"
@@ -70,6 +72,19 @@ func (c *Config) setDefaults() {
 func (c *Config) loadEnvVars() {
 	if os.Getenv("GITHUB_TOKEN") != "" {
 		c.Dashboards.Github.Token = os.Getenv("GITHUB_TOKEN")
+	}
+	if id := os.Getenv("GITHUB_APP_CLIENT_ID"); id != "" {
+		c.Dashboards.Github.ClientID = id
+	}
+	if id := os.Getenv("GITHUB_APP_INSTALLATION_ID"); id != "" && id != "0" {
+		instID, err := strconv.Atoi(id)
+		if err != nil {
+			panic(fmt.Errorf("convert installation id to int: %w", err))
+		}
+		c.Dashboards.Github.InstallationID = instID
+	}
+	if priv := os.Getenv("GITHUB_APP_PRIVATE_KEY"); priv != "" {
+		c.Dashboards.Github.PrivateKey = priv
 	}
 	if os.Getenv("GITLAB_TOKEN") != "" {
 		c.Dashboards.Gitlab.Token = os.Getenv("GITLAB_TOKEN")

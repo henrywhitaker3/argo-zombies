@@ -9,5 +9,8 @@ metadata:
     argo-zombies/ignore: "true"
 stringData:
   GITHUB_TOKEN: {{ .Values.config.dashboards.github.token | quote }}
+  GITHUB_APP_CLIENT_ID: {{ .Values.config.dashboards.github.client_id | quote }}
+  GITHUB_APP_INSTALLATION_ID: {{ .Values.config.dashboards.github.installation_id | quote }}
+  GITHUB_APP_PRIVATE_KEY: {{ .Values.config.dashboards.github.private_key | quote }}
   GITLAB_TOKEN: {{ .Values.config.dashboards.gitlab.token | quote }}
 {{- end }}
