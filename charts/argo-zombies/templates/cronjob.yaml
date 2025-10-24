@@ -30,6 +30,18 @@ spec:
             - name: argo-zombies-config
               configMap:
                 name: {{ include "chart.fullname" . }}
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           containers:
             - name: {{ .Chart.Name }}
               securityContext:
@@ -38,18 +50,6 @@ spec:
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
-              {{- with .Values.nodeSelector }}
-              nodeSelector:
-                {{- toYaml . | nindent 14 }}
-              {{- end }}
-              {{- with .Values.affinity }}
-              affinity:
-                {{- toYaml . | nindent 14 }}
-              {{- end }}
-              {{- with .Values.tolerations }}
-              tolerations:
-                {{- toYaml . | nindent 14 }}
-              {{- end }}
               command:
                 - /argo-zombies
                 - detect
