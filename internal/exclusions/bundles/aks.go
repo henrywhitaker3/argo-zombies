@@ -365,6 +365,26 @@ func AksBundle() BundleFunc {
 					Kind:      "ServiceAccount",
 					Version:   "v1",
 				},
+				{
+					Name:    "aks-managed-protect-kubernetes-endpointslice",
+					Kind:    "ValidatingAdmissionPolicy",
+					Version: "admissionregistration.k8s.io/v1",
+				},
+				{
+					Name:    "aks-managed-protect-kubernetes-endpoints",
+					Kind:    "ValidatingAdmissionPolicy",
+					Version: "admissionregistration.k8s.io/v1",
+				},
+				{
+					Name:    "aks-managed-protect-kubernetes-endpoints",
+					Kind:    "ValidatingAdmissionPolicyBinding",
+					Version: "admissionregistration.k8s.io/v1",
+				},
+				{
+					Name:    "aks-managed-protect-kubernetes-endpointslice",
+					Kind:    "ValidatingAdmissionPolicyBinding",
+					Version: "admissionregistration.k8s.io/v1",
+				},
 			},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},
