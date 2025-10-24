@@ -14,4 +14,5 @@ var Bundles map[string]BundleFunc = map[string]BundleFunc{
 	"cert-manager":  CertManagerBundle(),
 	"datadog":       DatadogBundle(),
 	"netbird":       NetbirdBundle(),
+	"cilium":        CiliumBundle(),
 }
