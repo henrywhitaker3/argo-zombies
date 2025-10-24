@@ -17,6 +17,52 @@ func CiliumBundle() BundleFunc {
 					Resource: "ciliumendpointslices",
 				},
 			},
+			Resources: []exclusions.ExcludedResource{
+				{
+					Name:      "cilium",
+					Namespace: "kube-system",
+					Kind:      "ConfigMap",
+					Version:   "v1",
+				},
+				{
+					Name:      "cilium-config",
+					Namespace: "kube-system",
+					Kind:      "ConfigMap",
+					Version:   "v1",
+				},
+				{
+					Name:      "cilium",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
+					Name:      "cilium-operator",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
+					Name:    "cilium-operator",
+					Kind:    "ClusterRole",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "cilium",
+					Kind:    "ClusterRole",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "cilium-operator",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
+					Name:    "cilium",
+					Kind:    "ClusterRoleBinding",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+			},
 		}
 	}
 }
