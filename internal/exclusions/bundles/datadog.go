@@ -31,6 +31,11 @@ func DatadogBundle() BundleFunc {
 					Kind:    "MutatingWebhookConfiguration",
 					Version: "admissionregistration.k8s.io/v1",
 				},
+				{
+					Name:    "datadog-webhook",
+					Kind:    "ValidatingWebhookConfiguration",
+					Version: "admissionregistration.k8s.io/v1",
+				},
 			},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},
