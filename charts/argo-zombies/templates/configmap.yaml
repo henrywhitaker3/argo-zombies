@@ -9,6 +9,7 @@ metadata:
 data:
   .argo-zombies.yaml: |
     dashboards:
+      title: {{ .Values.config.dashboards.title | quote }}
       github:
         enabled: {{ .Values.config.dashboards.github.enabled }}
         repo: {{ .Values.config.dashboards.github.repo | quote }}
