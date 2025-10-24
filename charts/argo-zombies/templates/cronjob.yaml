@@ -38,6 +38,18 @@ spec:
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
+              {{- with .Values.nodeSelector }}
+              nodeSelector:
+                {{- toYaml . | nindent 14 }}
+              {{- end }}
+              {{- with .Values.affinity }}
+              affinity:
+                {{- toYaml . | nindent 14 }}
+              {{- end }}
+              {{- with .Values.tolerations }}
+              tolerations:
+                {{- toYaml . | nindent 14 }}
+              {{- end }}
               command:
                 - /argo-zombies
                 - detect
@@ -72,15 +84,3 @@ spec:
                     secretKeyRef:
                       name: {{ .Values.config.dashboards.gitlab.tokenSecretRef.name | default "argo-zombies-dashboard-tokens" }}
                       key: {{ .Values.config.dashboards.gitlab.tokenSecretRef.key | default "GITLAB_TOKEN" }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
