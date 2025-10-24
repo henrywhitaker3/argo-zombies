@@ -2,9 +2,12 @@ package dashboard
 
 import (
 	"context"
+	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/google/go-github/github"
+	"github.com/jferrl/go-githubauth"
 	"golang.org/x/oauth2"
 )
 
@@ -15,27 +18,90 @@ type Github struct {
 	repo   string
 }
 
-func NewGithub(ctx context.Context, repo string, token string) *Github {
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: token},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-	client := github.NewClient(tc)
+type GithubOpts struct {
+	Repo              string
+	Token             string
+	AppClientID       string
+	AppInstallationID int
+	AppPrivateKey     string
+}
 
-	s := strings.SplitN(repo, "/", 2)
+func (g GithubOpts) authType() string {
+	if g.Token != "" {
+		return githubAuthToken
+	}
+	if g.AppClientID != "" && g.AppInstallationID != 0 && g.AppPrivateKey != "" {
+		return githubAuthApp
+	}
+	return ""
+}
+
+const (
+	githubAuthToken = "token"
+	githubAuthApp   = "app"
+)
+
+func NewGithub(ctx context.Context, opts GithubOpts) (*Github, error) {
+	var httpClient *http.Client
+	switch opts.authType() {
+	case githubAuthToken:
+		httpClient = githubTokenClient(ctx, opts.Token)
+	case githubAuthApp:
+		c, err := githubAppClient(ctx, opts.AppClientID, opts.AppInstallationID, opts.AppPrivateKey)
+		if err != nil {
+			return nil, fmt.Errorf("build app client: %w", err)
+		}
+		httpClient = c
+	default:
+		return nil, fmt.Errorf("invalid github auth config")
+	}
+
+	client := github.NewClient(httpClient)
+	s := strings.SplitN(opts.Repo, "/", 2)
 
 	return &Github{
 		ctx:    ctx,
 		client: client,
 		owner:  s[0],
 		repo:   s[1],
+	}, nil
+}
+
+func githubAppClient(
+	ctx context.Context,
+	clientID string,
+	installationID int,
+	privateKey string,
+) (*http.Client, error) {
+	appTokenSource, err := githubauth.NewApplicationTokenSource(clientID, []byte(privateKey))
+	if err != nil {
+		return nil, fmt.Errorf("create applicaiton token source: %w", err)
 	}
+
+	installationTokenSource := githubauth.NewInstallationTokenSource(
+		int64(installationID),
+		appTokenSource,
+	)
+
+	return oauth2.NewClient(ctx, installationTokenSource), nil
+}
+
+func githubTokenClient(ctx context.Context, token string) *http.Client {
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: token},
+	)
+	return oauth2.NewClient(ctx, ts)
 }
 
 func (g *Github) CreateOrUpdateDashboard(body string) error {
-	list, _, err := g.client.Issues.ListByRepo(g.ctx, g.owner, g.repo, &github.IssueListByRepoOptions{
-		Labels: labels,
-	})
+	list, _, err := g.client.Issues.ListByRepo(
+		g.ctx,
+		g.owner,
+		g.repo,
+		&github.IssueListByRepoOptions{
+			Labels: labels,
+		},
+	)
 	if err != nil {
 		return err
 	}
