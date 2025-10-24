@@ -54,7 +54,6 @@ github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/jferrl/go-githubauth v1.4.2 h1:kMAsSIWBTTy3MNMOna7OTseNvNLsXl/ME4+1SnjLSlY=
 github.com/jferrl/go-githubauth v1.4.2/go.mod h1:JZ6Ta7xaGYCsVOcX/gg++F+J68nV32zlnppQb3MNco8=
-github.com/jferrl/go-githubauth/v2 v2.0.0/go.mod h1:CWegJ0VNNWoqKsTxXCMFUHkxaL3/2+Wkl2am0O0zoyg=
 github.com/josharian/intern v1.0.0 h1:vlS4z54oSdjm0bgjRigI+G1HpF+tI+9rE5LLzOg8HmY=
 github.com/josharian/intern v1.0.0/go.mod h1:5DoeVV0s6jJacbCEi61lwdGj/aVlrQvzHFFd8Hwg//Y=
 github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnrnM=
