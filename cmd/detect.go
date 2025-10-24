@@ -46,6 +46,7 @@ var detectCmd = &cobra.Command{
 
 			if config.Cfg.Dashboards.Github.Enabled {
 				gh, err := dashboard.NewGithub(cmd.Context(), dashboard.GithubOpts{
+					Title:             config.Cfg.Dashboards.Title,
 					Repo:              config.Cfg.Dashboards.Github.Repo,
 					Token:             config.Cfg.Dashboards.Github.Token,
 					AppClientID:       config.Cfg.Dashboards.Github.ClientID,
@@ -60,7 +61,11 @@ var detectCmd = &cobra.Command{
 				}
 			}
 			if config.Cfg.Dashboards.Gitlab.Enabled {
-				gl, err := dashboard.NewGitlab(cmd.Context(), config.Cfg.Dashboards.Gitlab.Repo, config.Cfg.Dashboards.Gitlab.Token)
+				gl, err := dashboard.NewGitlab(cmd.Context(), dashboard.GitlabOpts{
+					Title: config.Cfg.Dashboards.Title,
+					Repo:  config.Cfg.Dashboards.Gitlab.Repo,
+					Token: config.Cfg.Dashboards.Gitlab.Token,
+				})
 				if err != nil {
 					return err
 				}
