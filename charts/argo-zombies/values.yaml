@@ -48,8 +48,24 @@ config:
       # The GitHub auth token to create the issue dashboard
       token: ""
 
+      # The github app client id
+      client_id: ""
+      # THe github app installation id
+      installation_id: 0
+      # The github app private key
+      private_key: ""
+
       # Reference an existing secret for the GitHub token, overrides the value of .config.dashboards.github.token if set
       tokenSecretRef:
+        name: ""
+        key: ""
+      clientIDSecretRef:
+        name: ""
+        key: ""
+      installationIDSecretRef:
+        name: ""
+        key: ""
+      privateKeySecretRef:
         name: ""
         key: ""
 
