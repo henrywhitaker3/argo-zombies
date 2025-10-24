@@ -4,6 +4,8 @@ Copyright © 2023 Henry Whitaker <henrywhitaker3@outlook.com>
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/henrywhitaker3/argo-zombies/internal/config"
 	"github.com/henrywhitaker3/argo-zombies/internal/dashboard"
 	"github.com/henrywhitaker3/argo-zombies/internal/detector"
@@ -43,7 +45,16 @@ var detectCmd = &cobra.Command{
 			}
 
 			if config.Cfg.Dashboards.Github.Enabled {
-				gh := dashboard.NewGithub(cmd.Context(), config.Cfg.Dashboards.Github.Repo, config.Cfg.Dashboards.Github.Token)
+				gh, err := dashboard.NewGithub(cmd.Context(), dashboard.GithubOpts{
+					Repo:              config.Cfg.Dashboards.Github.Repo,
+					Token:             config.Cfg.Dashboards.Github.Token,
+					AppClientID:       config.Cfg.Dashboards.Github.ClientID,
+					AppInstallationID: config.Cfg.Dashboards.Github.InstallationID,
+					AppPrivateKey:     config.Cfg.Dashboards.Github.PrivateKey,
+				})
+				if err != nil {
+					return fmt.Errorf("build github client: %w", err)
+				}
 				if err := gh.CreateOrUpdateDashboard(iB); err != nil {
 					return err
 				}
