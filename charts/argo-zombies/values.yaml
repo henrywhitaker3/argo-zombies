@@ -41,6 +41,7 @@ schedule: "0 * * * *"
 
 config:
   dashboards:
+    title: ""
     github:
       enabled: false
       repo: ""
