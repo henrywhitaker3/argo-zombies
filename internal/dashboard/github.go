@@ -16,9 +16,11 @@ type Github struct {
 	client *github.Client
 	owner  string
 	repo   string
+	title  string
 }
 
 type GithubOpts struct {
+	Title             string
 	Repo              string
 	Token             string
 	AppClientID       string
@@ -64,6 +66,7 @@ func NewGithub(ctx context.Context, opts GithubOpts) (*Github, error) {
 		client: client,
 		owner:  s[0],
 		repo:   s[1],
+		title:  opts.Title,
 	}, nil
 }
 
@@ -107,7 +110,7 @@ func (g *Github) CreateOrUpdateDashboard(body string) error {
 	}
 
 	for _, issue := range list {
-		if *issue.Title == title {
+		if *issue.Title == g.title {
 			return g.updateIssue(issue, body)
 		}
 	}
@@ -117,7 +120,7 @@ func (g *Github) CreateOrUpdateDashboard(body string) error {
 
 func (g *Github) createIssue(body string) error {
 	issue := &github.IssueRequest{
-		Title:  &title,
+		Title:  &g.title,
 		Labels: &labels,
 		Body:   &body,
 	}

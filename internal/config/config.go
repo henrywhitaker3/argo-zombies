@@ -17,12 +17,15 @@ var (
 	Cfg *Config
 )
 
+type Dashboards struct {
+	Title  string                    `yaml:"title"`
+	Github dashboard.GithubDashboard `yaml:"github"`
+	Gitlab dashboard.GitlabDashboard `yaml:"gitlab"`
+}
+
 type Config struct {
 	Exclusions exclusions.Exclusions `yaml:"exclusions"`
-	Dashboards struct {
-		Github dashboard.GithubDashboard `yaml:"github"`
-		Gitlab dashboard.GitlabDashboard `yaml:"gitlab"`
-	} `yaml:"dashboards"`
+	Dashboards Dashboards            `yaml:"dashboards"`
 }
 
 func LoadConfig(path string) error {
@@ -59,13 +62,13 @@ func (c *Config) setDefaults() {
 		}
 	}
 	if structs.IsZero(c.Dashboards) {
-		c.Dashboards = struct {
-			Github dashboard.GithubDashboard "yaml:\"github\""
-			Gitlab dashboard.GitlabDashboard "yaml:\"gitlab\""
-		}{
+		c.Dashboards = Dashboards{
 			Github: dashboard.GithubDashboard{Enabled: false},
 			Gitlab: dashboard.GitlabDashboard{Enabled: false},
 		}
+	}
+	if c.Dashboards.Title == "" {
+		c.Dashboards.Title = "Argo Zombies Dashboards"
 	}
 }
 
@@ -88,6 +91,9 @@ func (c *Config) loadEnvVars() {
 	}
 	if os.Getenv("GITLAB_TOKEN") != "" {
 		c.Dashboards.Gitlab.Token = os.Getenv("GITLAB_TOKEN")
+	}
+	if title := os.Getenv("DASHBOARD_TITLE"); title != "" {
+		c.Dashboards.Title = title
 	}
 }
 
