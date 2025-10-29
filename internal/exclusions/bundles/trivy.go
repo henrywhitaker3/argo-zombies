@@ -12,6 +12,13 @@ func TrivyBundle() BundleFunc {
 					Version: "batch/v1",
 				},
 			},
+			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{
+				{
+					Group:    "aquasecurity.github.io",
+					Version:  "v1alpha1",
+					Resource: "clustersbomreports",
+				},
+			},
 		}
 	}
 }
