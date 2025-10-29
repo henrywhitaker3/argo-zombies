@@ -15,4 +15,6 @@ var Bundles map[string]BundleFunc = map[string]BundleFunc{
 	"datadog":       DatadogBundle(),
 	"netbird":       NetbirdBundle(),
 	"cilium":        CiliumBundle(),
+	"kyverno":       KyvernoBundle(),
+	"trivy":         TrivyBundle(),
 }
