@@ -219,6 +219,11 @@ func AksBundle() BundleFunc {
 					Version: "rbac.authorization.k8s.io/v1",
 				},
 				{
+					Name:    "eraser-imagejob-pods-cluster-role",
+					Kind:    "ClusterRole",
+					Version: "rbac.authorization.k8s.io/v1",
+				},
+				{
 					Name:    "cloud-node-manager",
 					Kind:    "ClusterRole",
 					Version: "rbac.authorization.k8s.io/v1",

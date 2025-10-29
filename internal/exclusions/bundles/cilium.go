@@ -31,6 +31,12 @@ func CiliumBundle() BundleFunc {
 					Version:   "v1",
 				},
 				{
+					Name:      "cilium-ca",
+					Namespace: "kube-system",
+					Kind:      "Secret",
+					Version:   "v1",
+				},
+				{
 					Name:      "cilium",
 					Namespace: "kube-system",
 					Kind:      "ServiceAccount",
