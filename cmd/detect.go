@@ -12,6 +12,7 @@ import (
 	"github.com/henrywhitaker3/argo-zombies/internal/k8s"
 	"github.com/henrywhitaker3/argo-zombies/internal/views/detect"
 	"github.com/spf13/cobra"
+	"k8s.io/client-go/dynamic"
 )
 
 // detectCmd represents the detect command
@@ -23,12 +24,14 @@ var detectCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		dynClient, err := k8s.NewDynamicClient(cmd.Flag("kubeconfig").Value.String())
-		if err != nil {
-			return err
-		}
+		// dynClient, err :=
 
-		d := detector.NewDetector(client, dynClient)
+		d := detector.NewDetector(detector.DetectorOpts{
+			Client: client,
+			DynClient: func() (*dynamic.DynamicClient, error) {
+				return k8s.NewDynamicClient(cmd.Flag("kubeconfig").Value.String())
+			},
+		})
 
 		c, err := d.Detect(cmd.Context())
 		if err != nil {
