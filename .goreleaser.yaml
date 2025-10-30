@@ -1,3 +1,6 @@
+---
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
 before:
   hooks:
     - go mod tidy
@@ -12,8 +15,8 @@ builds:
     main: main.go
 
 archives:
-  - format: tar.gz
-    # this name template makes the OS and Arch compatible with the results of uname.
+  - formats:
+      - tar.gz
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
@@ -22,22 +25,25 @@ archives:
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  version_template: "{{ incpatch .Version }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
-dockers:
+      - "^docs:"
+      - "^test:"
+dockers_v2:
   - dockerfile: release.Dockerfile
-    image_templates:
-      - ghcr.io/henrywhitaker3/argo-zombies:{{ .Tag }}
-      - ghcr.io/henrywhitaker3/argo-zombies:latest
-
-# The lines beneath this are called `modelines`. See `:help modeline`
-# Feel free to remove those if you don't want/use them.
-# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
-# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+    images:
+      - ghcr.io/henrywhitaker3/argo-zombies
+    tags:
+      - latest
+      - "{{ .Tag }}"
+    labels:
+      "org.opencontainers.image.created": "{{.Date}}"
+      "org.opencontainers.image.name": "{{.ProjectName}}"
+      "org.opencontainers.image.revision": "{{.FullCommit}}"
+      "org.opencontainers.image.version": "{{.Version}}"
+      "org.opencontainers.image.source": "{{.GitURL}}"
