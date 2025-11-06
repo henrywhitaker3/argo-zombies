@@ -41,7 +41,7 @@ schedule: "0 * * * *"
 
 config:
   dashboards:
-    title: ""
+    title: "Argo Zombies Dashboard"
     github:
       enabled: false
       repo: ""
