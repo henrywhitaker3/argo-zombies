@@ -34,16 +34,8 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
-dockers_v2:
+dockers:
   - dockerfile: release.Dockerfile
-    images:
-      - ghcr.io/henrywhitaker3/argo-zombies
-    tags:
-      - latest
-      - "{{ .Tag }}"
-    labels:
-      "org.opencontainers.image.created": "{{.Date}}"
-      "org.opencontainers.image.name": "{{.ProjectName}}"
-      "org.opencontainers.image.revision": "{{.FullCommit}}"
-      "org.opencontainers.image.version": "{{.Version}}"
-      "org.opencontainers.image.source": "{{.GitURL}}"
+    image_templates:
+      - ghcr.io/henrywhitaker3/argo-zombies:{{ .Tag }}
+      - ghcr.io/henrywhitaker3/argo-zombies:latest
