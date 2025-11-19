@@ -17,4 +17,6 @@ var Bundles map[string]BundleFunc = map[string]BundleFunc{
 	"cilium":        CiliumBundle(),
 	"kyverno":       KyvernoBundle(),
 	"trivy":         TrivyBundle(),
+	"kargo":         KargoBundle(),
+	"istio":         IstioBundle(),
 }
