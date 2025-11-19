@@ -427,6 +427,11 @@ func AksBundle() BundleFunc {
 					Kind:    "Secret",
 					Version: "v1",
 				},
+				{
+					Name:    "allowed-iptables-patterns",
+					Kind:    "ConfigMap",
+					Version: "v1",
+				},
 			},
 			GroupVersionResources: []exclusions.ExcludedGroupVersionResource{},
 			Namespaces:            []string{},

@@ -83,6 +83,11 @@ func KyvernoBundle() BundleFunc {
 					Version:  "v1alpha2",
 					Resource: "policyreports",
 				},
+				{
+					Group:    "reports.kyverno.io",
+					Version:  "v1",
+					Resource: "ephemeralreports",
+				},
 			},
 		}
 	}

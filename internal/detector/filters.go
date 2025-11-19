@@ -4,6 +4,7 @@ import (
 	"regexp"
 
 	"github.com/henrywhitaker3/argo-zombies/internal/config"
+	"github.com/henrywhitaker3/argo-zombies/internal/exclusions/bundles"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
@@ -156,8 +157,10 @@ func ExcludedSelectorsFilter() Filter {
 }
 
 func ExcludedResourcessFilter() Filter {
+	argoResources := bundles.ArgoBundle()().Resources
 	return func(item unstructured.Unstructured) bool {
-		for _, r := range config.Cfg.Exclusions.Resources {
+		excl := append(config.Cfg.Exclusions.Resources, argoResources...)
+		for _, r := range excl {
 			if !resourceMatchesNamespace(r.Namespace, item) {
 				continue
 			}
