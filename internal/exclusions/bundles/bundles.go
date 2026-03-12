@@ -19,4 +19,5 @@ var Bundles map[string]BundleFunc = map[string]BundleFunc{
 	"trivy":         TrivyBundle(),
 	"kargo":         KargoBundle(),
 	"istio":         IstioBundle(),
+	"reflector":     ReflectorBundle(),
 }
