@@ -20,16 +20,22 @@ var detectCmd = &cobra.Command{
 	Use:   "detect",
 	Short: "Detect and list any resources not managed by ArgoCD",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := k8s.NewClient(cmd.Flag("kubeconfig").Value.String())
+		params := k8s.ConnectionParams{
+			KubeconfigPath:           cmd.Flag("kubeconfig").Value.String(),
+			URL:                      cmd.Flag("cluster-url").Value.String(),
+			ClientCertificatePath:    cmd.Flag("client-cert").Value.String(),
+			ClientKeyPath:            cmd.Flag("client-key").Value.String(),
+			ClusterCACertificatePath: cmd.Flag("cluster-ca").Value.String(),
+		}
+		client, err := k8s.NewClient(params)
 		if err != nil {
 			return err
 		}
-		// dynClient, err :=
 
 		d := detector.NewDetector(detector.DetectorOpts{
 			Client: client,
 			DynClient: func() (*dynamic.DynamicClient, error) {
-				return k8s.NewDynamicClient(cmd.Flag("kubeconfig").Value.String())
+				return k8s.NewDynamicClient(params)
 			},
 		})
 

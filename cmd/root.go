@@ -37,6 +37,11 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.PersistentFlags().String("config", ".argo-zombies.yaml", "Path to the argo-zombies config file")
+	rootCmd.PersistentFlags().
+		String("config", ".argo-zombies.yaml", "Path to the argo-zombies config file")
 	rootCmd.PersistentFlags().String("kubeconfig", "~/.kube/config", "Path to the kubeconfig file")
+	rootCmd.PersistentFlags().String("cluster-url", "", "The URL of the cluster API")
+	rootCmd.PersistentFlags().String("client-cert", "", "The path to the client certificate")
+	rootCmd.PersistentFlags().String("client-key", "", "The path to the client private key")
+	rootCmd.PersistentFlags().String("cluster-ca", "", "The path to the cluster CA certificate")
 }
