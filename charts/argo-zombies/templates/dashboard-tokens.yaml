@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: argo-zombies-dashboard-tokens
+  name: "{{ include "chart.fullname" . }}-tokens"
   labels:
     {{- include "chart.labels" . | nindent 4 }}
   annotations:

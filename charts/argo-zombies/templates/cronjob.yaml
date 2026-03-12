@@ -1,3 +1,4 @@
+{{- $tokensSecret := printf "%s-tokens" (include "chart.fullname" . ) }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -71,25 +72,25 @@ spec:
                 - name: GITHUB_TOKEN
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.config.dashboards.github.tokenSecretRef.name | default "argo-zombies-dashboard-tokens" }}
+                      name: {{ .Values.config.dashboards.github.tokenSecretRef.name | default $tokensSercet }}
                       key: {{ .Values.config.dashboards.github.tokenSecretRef.key | default "GITHUB_TOKEN" }}
                 - name: GITHUB_APP_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.config.dashboards.github.clientIDSecretRef.name | default "argo-zombies-dashboard-tokens" }}
+                      name: {{ .Values.config.dashboards.github.clientIDSecretRef.name | default $tokensSercet }}
                       key: {{ .Values.config.dashboards.github.clientIDSecretRef.key | default "GITHUB_APP_CLIENT_ID" }}
                 - name: GITHUB_APP_INSTALLATION_ID
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.config.dashboards.github.installationIDSecretRef.name | default "argo-zombies-dashboard-tokens" }}
+                      name: {{ .Values.config.dashboards.github.installationIDSecretRef.name | default $tokensSercet }}
                       key: {{ .Values.config.dashboards.github.installationIDSecretRef.key | default "GITHUB_APP_INSTALLATION_ID" }}
                 - name: GITHUB_APP_PRIVATE_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.config.dashboards.github.privateKeySecretRef.name | default "argo-zombies-dashboard-tokens" }}
+                      name: {{ .Values.config.dashboards.github.privateKeySecretRef.name | default $tokensSercet }}
                       key: {{ .Values.config.dashboards.github.privateKeySecretRef.key | default "GITHUB_APP_PRIVATE_KEY" }}
                 - name: GITLAB_TOKEN
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.config.dashboards.gitlab.tokenSecretRef.name | default "argo-zombies-dashboard-tokens" }}
+                      name: {{ .Values.config.dashboards.gitlab.tokenSecretRef.name | default $tokensSercet }}
                       key: {{ .Values.config.dashboards.gitlab.tokenSecretRef.key | default "GITLAB_TOKEN" }}
