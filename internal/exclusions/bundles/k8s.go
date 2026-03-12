@@ -187,6 +187,18 @@ func K8sBundle() BundleFunc {
 					Version:   "v1",
 				},
 				{
+					Name:      "resource-claim-controller",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
+					Name:      "volumeattributesclass-protection-controller",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
 					Name:    "kube-root-ca.crt",
 					Kind:    "ConfigMap",
 					Version: "v1",
