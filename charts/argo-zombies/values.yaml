@@ -37,6 +37,12 @@ tolerations: []
 
 affinity: {}
 
+volumes: []
+
+volumeMounts: []
+
+extraArgs: []
+
 schedule: "0 * * * *"
 
 config:

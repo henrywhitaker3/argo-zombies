@@ -30,6 +30,9 @@ spec:
             - name: argo-zombies-config
               configMap:
                 name: {{ include "chart.fullname" . }}
+            {{- with .Values.volumes }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
           {{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
@@ -55,9 +58,15 @@ spec:
                 - detect
                 - --config
                 - /config/.argo-zombies.yaml
+                {{- with .Values.extraArgs }}
+                {{- . | toYaml | nindent 16 }}
+                {{- end }}
               volumeMounts:
                 - name: argo-zombies-config
                   mountPath: /config
+                {{- with .Values.volumeMounts }}
+                {{- . | toYaml | nindent 16 }}
+                {{- end }}
               env:
                 - name: GITHUB_TOKEN
                   valueFrom:
