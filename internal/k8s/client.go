@@ -40,15 +40,13 @@ func NewDynamicClient(params ConnectionParams) (*dynamic.DynamicClient, error) {
 }
 
 func getConfig(params ConnectionParams) (*rest.Config, error) {
+	if params.URL != "" {
+		return buildDefinedConfig(params)
+	}
 	config, err := rest.InClusterConfig()
 	if err != nil {
-		builder := buildKubeconfigConfig
-		if params.URL != "" {
-			builder = buildDefinedConfig
-		}
-
 		// Grab it from kubeconfig if we can't get an in-cluster config
-		config, err = builder(params)
+		config, err = buildKubeconfigConfig(params)
 		if err != nil {
 			return nil, err
 		}
