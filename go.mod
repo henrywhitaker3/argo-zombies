@@ -1,6 +1,6 @@
 module github.com/henrywhitaker3/argo-zombies
 
-go 1.25.0
+go 1.26.0
 
 toolchain go1.26.1
 
@@ -13,7 +13,7 @@ require (
 	github.com/spf13/cobra v1.10.1
 	github.com/stretchr/testify v1.11.1
 	gitlab.com/gitlab-org/api/client-go/v2 v2.7.0
-	golang.org/x/oauth2 v0.36.0
+	golang.org/x/oauth2 v0.37.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.35.2
 	k8s.io/client-go v0.35.2
