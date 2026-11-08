@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	gitlab "gitlab.com/gitlab-org/api/client-go/v2"
+	gitlab "gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 type Gitlab struct {
@@ -42,7 +42,7 @@ func NewGitlab(ctx context.Context, opts GitlabOpts) (*Gitlab, error) {
 func (g *Gitlab) CreateOrUpdateDashboard(body string) error {
 	var proj *gitlab.Project
 	projs, _, err := g.client.Projects.ListProjects(&gitlab.ListProjectsOptions{
-		Membership: gitlab.Ptr(true),
+		Membership: new(true),
 	})
 	if err != nil {
 		return err
