@@ -61,6 +61,7 @@ exclusions:
     # - ingress-nginx
     # - cert-manager
     # - datadog
+    # - talos
 ```
 
 You can update you helm values to pass these config values to the CronJob.

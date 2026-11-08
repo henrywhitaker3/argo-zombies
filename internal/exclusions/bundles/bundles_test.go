@@ -22,7 +22,9 @@ func testCases() []testCase {
 	cases = append(cases, certManagerTestCases()...)
 	cases = append(cases, datadogTestCases()...)
 	cases = append(cases, ingressNginxTestCases()...)
+	cases = append(cases, k8sTestCases()...)
 	cases = append(cases, k3sTestCases()...)
+	cases = append(cases, talosTestCases()...)
 	return cases
 }
 

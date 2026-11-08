@@ -43,6 +43,12 @@ func K8sBundle() BundleFunc {
 					Version:   "v1",
 				},
 				{
+					Name:      "device-taint-eviction-controller",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
 					Name:      "disruption-controller",
 					Namespace: "kube-system",
 					Kind:      "ServiceAccount",
@@ -97,6 +103,12 @@ func K8sBundle() BundleFunc {
 					Version:   "v1",
 				},
 				{
+					Name:      "kube-apiserver-serving-clustertrustbundle-publisher",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
 					Name:      "namespace-controller",
 					Namespace: "kube-system",
 					Kind:      "ServiceAccount",
@@ -116,6 +128,12 @@ func K8sBundle() BundleFunc {
 				},
 				{
 					Name:      "pod-garbage-collector",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
+					Name:      "podcertificaterequestcleaner",
 					Namespace: "kube-system",
 					Kind:      "ServiceAccount",
 					Version:   "v1",
@@ -169,6 +187,12 @@ func K8sBundle() BundleFunc {
 					Version:   "v1",
 				},
 				{
+					Name:      "storage-version-migrator-controller",
+					Namespace: "kube-system",
+					Kind:      "ServiceAccount",
+					Version:   "v1",
+				},
+				{
 					Name:      "token-cleaner",
 					Namespace: "kube-system",
 					Kind:      "ServiceAccount",
@@ -205,6 +229,12 @@ func K8sBundle() BundleFunc {
 				},
 				{
 					Name:      "extension-apiserver-authentication",
+					Namespace: "kube-system",
+					Kind:      "ConfigMap",
+					Version:   "v1",
+				},
+				{
+					Name:      "kube-apiserver-legacy-service-account-token-tracking",
 					Namespace: "kube-system",
 					Kind:      "ConfigMap",
 					Version:   "v1",

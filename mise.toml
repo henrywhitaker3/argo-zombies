@@ -10,10 +10,7 @@ git-cliff = "v2.14.2"
 description = "Run the app"
 run = '''
 #!/usr/bin/env bash
-go run main.go "$@" | (
-  trap '' INT TERM
-  jq
-)
+go run main.go "$@"
 '''
 
 [tasks.test]
