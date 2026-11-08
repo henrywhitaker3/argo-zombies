@@ -1,8 +1,6 @@
 module github.com/henrywhitaker3/argo-zombies
 
-go 1.25.0
-
-toolchain go1.26.1
+go 1.27.3
 
 require (
 	github.com/fatih/color v1.18.0
@@ -17,7 +15,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.35.3
 	k8s.io/client-go v0.35.3
-	k8s.io/utils v0.0.0-20260210185600-b8788abfbbc2
+	k8s.io/utils v0.0.0-20260319190234-28399d86e0b5
 )
 
 require (
