@@ -97,22 +97,31 @@ func githubTokenClient(ctx context.Context, token string) *http.Client {
 }
 
 func (g *Github) CreateOrUpdateDashboard(body string) error {
-	list, _, err := g.client.Issues.ListByRepo(
-		g.ctx,
-		g.owner,
-		g.repo,
-		&github.IssueListByRepoOptions{
-			Labels: labels,
+	options := &github.IssueListByRepoOptions{
+		State:  "open",
+		Labels: labels,
+		ListOptions: github.ListOptions{
+			PerPage: 100,
 		},
-	)
-	if err != nil {
-		return err
 	}
 
-	for _, issue := range list {
-		if *issue.Title == g.title {
-			return g.updateIssue(issue, body)
+	for {
+		list, response, err := g.client.Issues.ListByRepo(g.ctx, g.owner, g.repo, options)
+		if err != nil {
+			return err
 		}
+
+		for _, issue := range list {
+			if issue.GetTitle() == g.title {
+				return g.updateIssue(issue, body)
+			}
+		}
+
+		if response.NextPage == 0 {
+			break
+		}
+
+		options.Page = response.NextPage
 	}
 
 	return g.createIssue(body)

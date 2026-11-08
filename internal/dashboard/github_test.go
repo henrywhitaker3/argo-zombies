@@ -65,6 +65,31 @@ func TestGithubCreateOrUpdateDashboard(t *testing.T) {
 		assert.Equal(t, labels, *updateRequest.Labels)
 	})
 
+	t.Run("finds a dashboard on a later page", func(t *testing.T) {
+		listRequests := 0
+		updated := false
+		dashboard := newGithubDashboard(t, func(w http.ResponseWriter, r *http.Request) {
+			switch {
+			case r.Method == http.MethodGet && r.URL.Path == "/repos/owner/repo/issues" && r.URL.Query().Get("page") == "":
+				listRequests++
+				w.Header().Set("Link", "<http://"+r.Host+"/repos/owner/repo/issues?page=2>; rel=\"next\"")
+				writeGithubJSON(t, w, []github.Issue{{Number: github.Int(1), Title: github.String("another issue")}})
+			case r.Method == http.MethodGet && r.URL.Path == "/repos/owner/repo/issues" && r.URL.Query().Get("page") == "2":
+				listRequests++
+				writeGithubJSON(t, w, []github.Issue{{Number: github.Int(7), Title: github.String("zombies"), State: github.String("open")}})
+			case r.Method == http.MethodPatch && r.URL.Path == "/repos/owner/repo/issues/7":
+				updated = true
+				writeGithubJSON(t, w, github.Issue{})
+			default:
+				http.NotFound(w, r)
+			}
+		})
+
+		require.NoError(t, dashboard.CreateOrUpdateDashboard("updated body"))
+		assert.Equal(t, 2, listRequests)
+		assert.True(t, updated)
+	})
+
 	t.Run("returns issue list errors", func(t *testing.T) {
 		dashboard := newGithubDashboard(t, func(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "unavailable", http.StatusServiceUnavailable)
