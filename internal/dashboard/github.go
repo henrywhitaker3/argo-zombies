@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/google/go-github/github"
-	"github.com/jferrl/go-githubauth/v2"
+	"github.com/jferrl/go-githubauth"
 	"golang.org/x/oauth2"
 )
 
