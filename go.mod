@@ -10,7 +10,7 @@ require (
 	github.com/rodaine/table v1.4.1
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.12.1
-	gitlab.com/gitlab-org/api/client-go/v3 v3.44.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.46.0
 	golang.org/x/oauth2 v0.37.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.37.2
