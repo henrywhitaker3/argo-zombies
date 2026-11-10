@@ -7,11 +7,10 @@ require (
 	github.com/fatih/structs v1.1.0
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/jferrl/go-githubauth v1.12.0
-	github.com/jferrl/go-githubauth/v2 v2.0.1
 	github.com/rodaine/table v1.4.1
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.12.1
-	gitlab.com/gitlab-org/api/client-go/v3 v3.46.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.46.1
 	golang.org/x/oauth2 v0.37.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.37.2
